@@ -25,7 +25,10 @@ export default function Taskbar({ onStartToggle, startMenuOpen }: TaskbarProps) 
       <button
         type="button"
         className="taskbar__start-btn inline-flex items-center gap-2 px-3 py-1 bg-win-gray shadow-raised h-[22px] text-[11px] font-bold"
-        onClick={onStartToggle}
+        onClick={(event) => {
+          event.stopPropagation()
+          onStartToggle()
+        }}
         aria-haspopup="true"
         aria-expanded={startMenuOpen}
       >

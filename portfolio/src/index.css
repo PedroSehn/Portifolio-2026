@@ -3,7 +3,14 @@
 @tailwind utilities;
 
 :root {
-  --font: 'Tahoma', 'MS Sans Serif', 'Arial', sans-serif;
+  --gray:    #c0c0c0;
+  --dark:    #808080;
+  --darker:  #404040;
+  --white:   #ffffff;
+  --black:   #000000;
+  --navy:    #000080;
+  --teal-bg: #008080;
+  --font:    'Tahoma', 'MS Sans Serif', 'Arial', sans-serif;
   --raised:
     inset -1px -1px 0 #404040,
     inset 1px 1px 0 #ffffff,
@@ -25,6 +32,10 @@ html {
 body {
   min-height: 100vh;
   font-family: var(--font);
+  background: var(--teal-bg);
+  color: var(--black);
+  overflow-x: hidden;
+  padding-bottom: 30px;
 }
 
 /* Scrollbar estilo Win98 */
@@ -170,4 +181,80 @@ body {
 .desktop-icon--active .desktop-icon__label {
   background: #000080;
   outline: 1px dotted #9090ff;
+}
+
+.taskbar__separator {
+  width: 1px;
+  height: 22px;
+  background: #808080;
+  box-shadow: 1px 0 0 #ffffff;
+  margin: 0 3px;
+  flex-shrink: 0;
+}
+
+.start-menu {
+  position: fixed;
+  bottom: 30px;
+  left: 0;
+  width: 220px;
+  background: var(--gray);
+  border: 2px solid;
+  border-color: var(--white) var(--dark) var(--dark) var(--white);
+  box-shadow: 2px 2px 0 var(--black);
+  z-index: 10000;
+  display: flex;
+  transform-origin: bottom left;
+  animation: menuPop 0.12s ease-out;
+}
+.start-menu[hidden] { display: none; }
+
+@keyframes menuPop {
+  from { transform: scaleY(0.6); opacity: 0; }
+  to   { transform: scaleY(1);   opacity: 1; }
+}
+
+.start-menu__banner {
+  width: 26px;
+  background: linear-gradient(to top, #000080, #1084d0);
+  display: flex;
+  align-items: flex-end;
+  padding: 8px 5px;
+  flex-shrink: 0;
+}
+.start-menu__banner-text {
+  color: white;
+  font-size: 13px;
+  font-weight: 700;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  letter-spacing: 2px;
+  user-select: none;
+}
+
+.start-menu__items {
+  flex: 1;
+  padding: 4px 0;
+}
+
+.start-menu__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 14px;
+  font-size: 11px;
+  cursor: pointer;
+  user-select: none;
+  text-decoration: none;
+  color: var(--black);
+}
+.start-menu__item:hover {
+  background: var(--navy);
+  color: white;
+}
+
+.start-menu__separator {
+  height: 1px;
+  background: var(--dark);
+  box-shadow: 0 1px 0 var(--white);
+  margin: 3px 6px;
 }
