@@ -7,6 +7,10 @@ interface WindowProps {
   children: ReactNode
   className?: string
   style?: CSSProperties
+  titlebarClassName?: string
+  isActive?: boolean
+  onActivate?: () => void
+  menuItems?: string[]
 }
 
 export default function Window({
@@ -16,38 +20,64 @@ export default function Window({
   statusBar = [],
   className = '',
   style,
+  titlebarClassName,
+  isActive = true,
+  onActivate,
+  menuItems,
 }: WindowProps) {
   return (
     <section
-      className={`bg-win-gray border-2 border-t-win-white border-l-win-white border-r-win-dark border-b-win-dark shadow-win-outer animate-window-open ${className}`}
+      className={`win95-raised win95-window-animate flex flex-col bg-win95-silver ${className}`}
       style={style}
+      onClick={onActivate}
     >
-      <header className="flex items-center gap-2 px-3 py-1 bg-titlebar text-white text-[11px] font-bold tracking-tight">
+      <header
+        className={`win95-titlebar ${!isActive ? 'win95-titlebar-inactive' : ''} ${titlebarClassName ?? ''}`.trim()}
+      >
         <span className="text-lg" aria-hidden="true">
           {icon}
         </span>
         <span className="truncate flex-1">{title}</span>
         <div className="flex gap-1" aria-hidden="true">
-          {['_', '□', '✕'].map((symbol) => (
-            <button
-              key={symbol}
-              type="button"
-              className="w-4 h-3 bg-win-gray shadow-raised text-[10px] leading-none"
-              tabIndex={-1}
-            >
-              {symbol}
-            </button>
-          ))}
+          <button className="win95-titlebar-button" aria-label="Minimize">
+            <span
+              style={{ borderBottom: '1px solid black', width: 6, display: 'block' }}
+            />
+          </button>
+          <button className="win95-titlebar-button" aria-label="Maximize">
+            <span
+              style={{
+                border: '1px solid black',
+                width: 7,
+                height: 6,
+                display: 'block',
+                borderTopWidth: 2,
+              }}
+            />
+          </button>
+          <button className="win95-titlebar-button" aria-label="Close">
+            <span style={{ fontSize: 9, fontWeight: 'bold', lineHeight: 1 }}>✕</span>
+          </button>
         </div>
       </header>
+
+      {menuItems && (
+        <div className="win95-menubar">
+          {menuItems.map((item) => (
+            <span key={item} className="win95-menubar-item">
+              <span style={{ textDecoration: 'underline' }}>{item[0]}</span>
+              {item.slice(1)}
+            </span>
+          ))}
+        </div>
+      )}
+
       <div className="px-6 py-5">{children}</div>
+
       {statusBar.length > 0 && (
-        <footer className="flex border-t border-win-dark px-3 py-2 gap-2 text-[10px]">
+        <footer className="win95-statusbar">
           {statusBar.map((cell) => (
-            <span
-              key={cell}
-              className="px-2 py-0.5 shadow-sunken text-win-darker"
-            >
+            <span key={cell} className="win95-statusbar-section">
               {cell}
             </span>
           ))}

@@ -2,7 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
-html { scroll-behavior: smooth; font-size: 11px; }
+:root {
+  --font: 'Tahoma', 'MS Sans Serif', 'Arial', sans-serif;
+  --raised:
+    inset -1px -1px 0 #404040,
+    inset 1px 1px 0 #ffffff,
+    inset -2px -2px 0 #808080,
+    inset 2px 2px 0 #dfdfdf;
+  --sunken:
+    inset 1px 1px 0 #404040,
+    inset -1px -1px 0 #ffffff,
+    inset 2px 2px 0 #808080,
+    inset -2px -2px 0 #dfdfdf;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 11px;
+  font-family: var(--font);
+}
+
+body {
+  min-height: 100vh;
+  font-family: var(--font);
+}
 
 /* Scrollbar estilo Win98 */
 ::-webkit-scrollbar       { width: 16px; }
@@ -16,3 +39,92 @@ html { scroll-behavior: smooth; font-size: 11px; }
 .cc { color: #80ff80; }
 .cn { color: #ff80c0; }
 .cp { color: #ffffff; }
+
+.win95-raised {
+  border: 2px solid;
+  border-color: #ffffff #808080 #808080 #ffffff;
+  box-shadow: 2px 2px 0 #000000;
+}
+
+.win95-window-animate {
+  animation: windowOpen 0.18s ease-out;
+}
+
+@keyframes windowOpen {
+  from {
+    transform: scale(0.97) translateY(6px);
+    opacity: 0.5;
+  }
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+.win95-titlebar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 5px;
+  background: linear-gradient(90deg, #000080, #1084d0);
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  user-select: none;
+}
+
+.win95-titlebar-inactive {
+  background: #808080;
+}
+
+.win95-titlebar-button {
+  width: 16px;
+  height: 14px;
+  background: #c0c0c0;
+  box-shadow: var(--raised);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0;
+}
+.win95-titlebar-button:active {
+  box-shadow: var(--sunken);
+}
+
+.win95-menubar {
+  display: flex;
+  padding: 1px 2px;
+  border-bottom: 1px solid #808080;
+}
+
+.win95-menubar-item {
+  padding: 2px 6px;
+  font-size: 11px;
+  cursor: default;
+  user-select: none;
+}
+.win95-menubar-item:hover {
+  background: #000080;
+  color: white;
+}
+
+.win95-statusbar {
+  display: flex;
+  border-top: 1px solid #808080;
+  padding: 2px 4px;
+  gap: 4px;
+}
+
+.win95-statusbar-section {
+  box-shadow: var(--sunken);
+  padding: 1px 8px;
+  font-size: 10px;
+  color: #404040;
+}
+
+.bg-win95-silver {
+  background: #c0c0c0;
+}

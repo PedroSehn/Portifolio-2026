@@ -4,6 +4,11 @@ import Window from '../ui/Window'
 import { projects } from '../../data/projects'
 import type { Project } from '../../types'
 
+interface ProjectsProps {
+  isActive?: boolean
+  onActivate?: () => void
+}
+
 function ProjectCard({ project }: { project: Project }) {
   const gradient = `linear-gradient(90deg, ${project.color}, ${project.color}99)`
   const preview = `linear-gradient(160deg, ${project.color}22, #00000808)`
@@ -40,10 +45,15 @@ function ProjectCard({ project }: { project: Project }) {
   )
 }
 
-export default function Projects() {
+export default function Projects({ isActive, onActivate }: ProjectsProps) {
   return (
     <section id="projects" aria-labelledby="projects-title">
-      <Window icon="📁" title="Projetos — Windows Explorer">
+      <Window
+        icon="📁"
+        title="Projetos — Windows Explorer"
+        isActive={isActive}
+        onActivate={onActivate}
+      >
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
           {projects.map((project) => (
             <ProjectCard key={project.id} project={project} />

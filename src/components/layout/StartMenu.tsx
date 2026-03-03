@@ -7,7 +7,7 @@ interface StartMenuProps {
 
 const menuItems = [
   { label: '💻 Portfólio', href: '#hero' },
-  { label: '👤 Sobre Mim', href: '#about' },
+  // { label: '👤 Sobre Mim', href: '#about' },
   { label: '⚙️ Tecnologias', href: '#tech' },
   { label: '📁 Projetos', href: '#projects' },
   { label: '✉️ Contato', href: '#contact' },
