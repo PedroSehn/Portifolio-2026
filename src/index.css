@@ -142,7 +142,6 @@ body {
   position: fixed;
   top: 20px;
   left: 14px;
-  display: flex;
   flex-direction: column;
   gap: 18px;
   z-index: 10;
@@ -512,5 +511,19 @@ body {
   }
   #tech .sidebar-item {
     white-space: nowrap;
+  }
+  #tech .file-grid {
+    flex-direction: row;
+    justify-content: center;
+    overflow-x: auto;
+    gap: 8px;
+  }
+  #tech .file-icon {
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+  }
+  #tech .file-icon__img {
+    margin: 0 auto;
   }
 }

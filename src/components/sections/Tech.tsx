@@ -1,14 +1,8 @@
 import { useEffect, useMemo, useState, type KeyboardEvent } from 'react'
+import { defaultWindowMenu } from '../../constants/windowMenu'
 import { techCategories } from '../../data/techs'
 import type { TechCategory } from '../../types'
 import Window from '../ui/Window'
-
-const menuItems = [
-  { label: 'Arquivo', underlineIndex: 0 },
-  { label: 'Editar', underlineIndex: 0 },
-  { label: 'Exibir', underlineIndex: 1 },
-  { label: 'Ajuda', underlineIndex: 1 },
-]
 
 interface TechProps {
   isActive?: boolean
@@ -58,7 +52,7 @@ export default function Tech({ isActive = true, onActivate }: TechProps) {
           title="Explorador — Tecnologias"
           isActive={isActive}
           onActivate={onActivate}
-          menuItems={menuItems}
+          menuItems={defaultWindowMenu}
           statusBar={[`${activeCategory.techs.length} objetos`]}
           className="w-full"
         >

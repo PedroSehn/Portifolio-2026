@@ -3,6 +3,7 @@ import GroupBox from '../ui/GroupBox'
 import Input from '../ui/Input'
 import Textarea from '../ui/Textarea'
 import Window from '../ui/Window'
+import { defaultWindowMenu } from '../../constants/windowMenu'
 
 interface ContactProps {
   isActive?: boolean
@@ -33,6 +34,8 @@ export default function Contact({ isActive, onActivate }: ContactProps) {
       <Window
         icon="✉️"
         title="Nova Mensagem — Outlook Express"
+        menuItems={defaultWindowMenu}
+        statusBar={['Pronto', 'Online — resposta em até 24h']}
         isActive={isActive}
         onActivate={onActivate}
       >

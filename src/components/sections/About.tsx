@@ -1,5 +1,6 @@
 import Button from '../ui/Button'
 import Window from '../ui/Window'
+import { defaultWindowMenu } from '../../constants/windowMenu'
 
 interface AboutProps {
   isActive?: boolean
@@ -9,7 +10,15 @@ interface AboutProps {
 export default function About({ isActive, onActivate }: AboutProps) {
   return (
     <section id="about" aria-labelledby="about-title">
-      <Window icon="👤" title="Sobre Mim" className="grid" isActive={isActive} onActivate={onActivate}>
+      <Window
+        icon="👤"
+        title="Sobre Mim"
+        className="grid"
+        menuItems={defaultWindowMenu}
+        statusBar={['Fullstack Developer', '5 anos de experiência', 'Disponível para projetos']}
+        isActive={isActive}
+        onActivate={onActivate}
+      >
         <div className="grid md:grid-cols-[auto,1fr] gap-6">
           <div
             className="w-[180px] h-[220px] bg-gradient-to-br from-[#a0a0a0] to-[#d0d0d0] shadow-sunken flex flex-col items-center justify-center gap-2"

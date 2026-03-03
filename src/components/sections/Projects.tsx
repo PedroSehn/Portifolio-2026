@@ -1,6 +1,7 @@
 import Button from '../ui/Button'
 import Tag from '../ui/Tag'
 import Window from '../ui/Window'
+import { defaultWindowMenu } from '../../constants/windowMenu'
 import { projects } from '../../data/projects'
 import type { Project } from '../../types'
 
@@ -51,6 +52,8 @@ export default function Projects({ isActive, onActivate }: ProjectsProps) {
       <Window
         icon="📁"
         title="Projetos — Windows Explorer"
+        menuItems={defaultWindowMenu}
+        statusBar={[`${projects.length} projetos`]}
         isActive={isActive}
         onActivate={onActivate}
       >

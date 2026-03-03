@@ -1,5 +1,6 @@
 import Button from '../ui/Button'
 import Window from '../ui/Window'
+import { defaultWindowMenu } from '../../constants/windowMenu'
 
 interface HeroProps {
   isActive?: boolean
@@ -12,16 +13,17 @@ export default function Hero({ isActive, onActivate }: HeroProps) {
       <Window
         icon="💻"
         title="portfolio.exe"
+        menuItems={defaultWindowMenu}
         statusBar={[
           '5 anos de experiência',
           '30+ projetos entregues',
           '12+ clientes',
         ]}
-        className="grid gap-6"
         isActive={isActive}
         onActivate={onActivate}
       >
-        <div className="grid gap-4">
+        <div className="grid gap-6">
+          <div className="grid gap-4">
           <p className="text-[10px] uppercase tracking-[0.2em] text-win-dark">
             Disponível para projetos
           </p>
@@ -37,9 +39,9 @@ export default function Hero({ isActive, onActivate }: HeroProps) {
             </Button>
             <Button href="#contact">✉️ Contato</Button>
           </div>
-        </div>
+          </div>
 
-        <article className="bg-black p-4 text-[12px] font-mono text-win-gray shadow-sunken">
+          <article className="bg-black p-4 text-[12px] font-mono text-win-gray shadow-sunken">
           <pre>
             <code>
               const dev = {'{'}
@@ -56,6 +58,7 @@ export default function Hero({ isActive, onActivate }: HeroProps) {
             </code>
           </pre>
         </article>
+        </div>
       </Window>
     </section>
   )
