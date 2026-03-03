@@ -48,13 +48,14 @@ body {
 ::-webkit-scrollbar-track { @apply bg-win-gray shadow-sunken; }
 ::-webkit-scrollbar-thumb { @apply bg-win-gray shadow-raised; }
 
-/* Syntax highlight do bloco de codigo no Hero */
-.ck { color: #b0b0ff; }
-.cf { color: #80ffff; }
-.cs { color: #ffff80; }
-.cc { color: #80ff80; }
-.cn { color: #ff80c0; }
-.cp { color: #ffffff; }
+/* Syntax highlight do bloco de codigo no Hero - IDE style */
+#hero .code-keyword   { color: #c678dd; }  /* purple - const */
+#hero .code-variable  { color: #e06c75; }  /* red - identifier */
+#hero .code-property  { color: #e5c07b; } /* yellow - keys */
+#hero .code-string    { color: #98c379; } /* green - strings */
+#hero .code-number    { color: #d19a66; } /* orange - numbers */
+#hero .code-boolean   { color: #56b6c2; } /* cyan - true/false */
+#hero .code-punctuation { color: #abb2bf; } /* gray - : , { } */
 
 .win95-raised {
   border: 2px solid;

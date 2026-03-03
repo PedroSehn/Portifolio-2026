@@ -8,6 +8,7 @@ interface WindowProps {
   statusBar?: string[]
   children: ReactNode
   className?: string
+  contentClassName?: string
   style?: CSSProperties
   titlebarClassName?: string
   isActive?: boolean
@@ -21,6 +22,7 @@ export default function Window({
   title,
   statusBar = [],
   className = '',
+  contentClassName = '',
   style,
   titlebarClassName,
   isActive = true,
@@ -79,7 +81,7 @@ export default function Window({
         </div>
       )}
 
-      <div className="px-6 py-5">{children}</div>
+      <div className={contentClassName || 'px-6 py-5'}>{children}</div>
 
       {statusBar.length > 0 && (
         <footer className="win95-statusbar">
