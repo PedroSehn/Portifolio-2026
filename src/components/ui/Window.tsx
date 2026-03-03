@@ -1,5 +1,7 @@
 import type { CSSProperties, ReactNode } from 'react'
 
+type WindowMenuItem = string | { label: string; underlineIndex?: number }
+
 interface WindowProps {
   icon: string
   title: string
@@ -10,7 +12,7 @@ interface WindowProps {
   titlebarClassName?: string
   isActive?: boolean
   onActivate?: () => void
-  menuItems?: string[]
+  menuItems?: WindowMenuItem[]
 }
 
 export default function Window({
@@ -25,6 +27,14 @@ export default function Window({
   onActivate,
   menuItems,
 }: WindowProps) {
+  const menuItemsWithUnderline = (menuItems ?? []).map((item) => {
+    const label = typeof item === 'string' ? item : item.label
+    const requestedIndex = typeof item === 'string' ? 0 : item.underlineIndex ?? 0
+    const maxIndex = label.length > 0 ? label.length - 1 : 0
+    const underlineIndex = Math.max(0, Math.min(requestedIndex, maxIndex))
+    return { label, underlineIndex }
+  })
+
   return (
     <section
       className={`win95-raised win95-window-animate flex flex-col bg-win95-silver ${className}`}
@@ -32,7 +42,9 @@ export default function Window({
       onClick={onActivate}
     >
       <header
-        className={`win95-titlebar ${!isActive ? 'win95-titlebar-inactive' : ''} ${titlebarClassName ?? ''}`.trim()}
+        className={`win95-titlebar ${!isActive ? 'win95-titlebar-inactive' : ''} ${
+          titlebarClassName ?? ''
+        }`.trim()}
       >
         <span className="text-lg" aria-hidden="true">
           {icon}
@@ -61,14 +73,23 @@ export default function Window({
         </div>
       </header>
 
-      {menuItems && (
+      {menuItemsWithUnderline.length > 0 && (
         <div className="win95-menubar">
-          {menuItems.map((item) => (
-            <span key={item} className="win95-menubar-item">
-              <span style={{ textDecoration: 'underline' }}>{item[0]}</span>
-              {item.slice(1)}
-            </span>
-          ))}
+          {menuItemsWithUnderline.map((item, index) => {
+            const before = item.label.slice(0, item.underlineIndex)
+            const highlightedChar = item.label[item.underlineIndex] ?? ''
+            const after = highlightedChar
+              ? item.label.slice(item.underlineIndex + 1)
+              : item.label.slice(item.underlineIndex)
+
+            return (
+              <span key={`${item.label}-${index}`} className="win95-menubar-item">
+                {before}
+                {highlightedChar ? <u>{highlightedChar}</u> : null}
+                {after}
+              </span>
+            )
+          })}
         </div>
       )}
 
