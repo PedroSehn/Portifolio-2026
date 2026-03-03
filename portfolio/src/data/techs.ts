@@ -1,12 +1,40 @@
-import type { Tech } from '../types'
+import type { TechCategory } from '../types'
 
-export const techs: Tech[] = [
-  { name: 'JavaScript', level: 95 },
-  { name: 'TypeScript', level: 92 },
-  { name: 'React', level: 90 },
-  { name: 'Node.js', level: 88 },
-  { name: 'PostgreSQL', level: 82 },
-  { name: 'Python', level: 75 },
-  { name: 'Docker', level: 78 },
-  { name: 'Git', level: 93 },
+export const techCategories: TechCategory[] = [
+  {
+    id: 'frontend',
+    label: 'Frontend',
+    techs: [
+      { name: 'JavaScript', icon: '📜' },
+      { name: 'TypeScript', icon: '🔷' },
+      { name: 'React', icon: '⚛️' },
+      { name: 'HTML5', icon: '🌐' },
+      { name: 'CSS3', icon: '🎨' },
+      { name: 'Next.js', icon: '▲' },
+    ],
+  },
+  {
+    id: 'backend',
+    label: 'Backend',
+    techs: [
+      { name: 'Node.js', icon: '💚' },
+      { name: 'Python', icon: '🐍' },
+      { name: 'PostgreSQL', icon: '🐘' },
+      { name: 'MongoDB', icon: '🍃' },
+      { name: 'REST API', icon: '🔗' },
+      { name: 'GraphQL', icon: '◈' },
+    ],
+  },
+  {
+    id: 'devops',
+    label: 'DevOps',
+    techs: [
+      { name: 'Docker', icon: '🐳' },
+      { name: 'Git', icon: '🔧' },
+      { name: 'Linux', icon: '🐧' },
+      { name: 'AWS', icon: '☁️' },
+      { name: 'CI/CD', icon: '🔄' },
+      { name: 'Nginx', icon: '⚡' },
+    ],
+  },
 ]

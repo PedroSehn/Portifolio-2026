@@ -4,6 +4,11 @@ import Input from '../ui/Input'
 import Textarea from '../ui/Textarea'
 import Window from '../ui/Window'
 
+interface ContactProps {
+  isActive?: boolean
+  onActivate?: () => void
+}
+
 const contactLinks = [
   {
     label: 'GitHub',
@@ -22,10 +27,15 @@ const contactLinks = [
   },
 ]
 
-export default function Contact() {
+export default function Contact({ isActive, onActivate }: ContactProps) {
   return (
     <section id="contact" aria-labelledby="contact-title">
-      <Window icon="✉️" title="Nova Mensagem — Outlook Express">
+      <Window
+        icon="✉️"
+        title="Nova Mensagem — Outlook Express"
+        isActive={isActive}
+        onActivate={onActivate}
+      >
         <div className="grid md:grid-cols-[1.1fr,0.9fr] gap-6">
           <form className="flex flex-col gap-4" noValidate aria-label="Formulário de contato">
             <div className="grid md:grid-cols-2 gap-3">

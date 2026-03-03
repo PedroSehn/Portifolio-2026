@@ -1,6 +1,12 @@
-export interface Tech {
+export interface Technology {
   name: string
-  level: number
+  icon: string
+}
+
+export interface TechCategory {
+  id: string
+  label: string
+  techs: Technology[]
 }
 
 export interface Project {

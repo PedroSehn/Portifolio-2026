@@ -7,7 +7,7 @@ interface TaskbarProps {
 
 const navLinks = [
   { href: '#hero', label: '💻 portfolio.exe' },
-  { href: '#about', label: '👤 Sobre Mim' },
+  // { href: '#about', label: '👤 Sobre Mim' },
   { href: '#tech', label: '⚙️ Tecnologias' },
   { href: '#projects', label: '📁 Projetos' },
   { href: '#contact', label: '✉️ Contato' },

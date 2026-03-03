@@ -4,23 +4,39 @@ import DesktopIcons from './components/layout/DesktopIcons'
 import Taskbar from './components/layout/Taskbar'
 import StartMenu from './components/layout/StartMenu'
 import Hero from './components/sections/Hero'
-import About from './components/sections/About'
+// import About from './components/sections/About'
 import Tech from './components/sections/Tech'
 import Projects from './components/sections/Projects'
 import Contact from './components/sections/Contact'
 
 function App() {
   const [startMenuOpen, setStartMenuOpen] = useState(false)
+  const [activeWindow, setActiveWindow] = useState<string | null>('hero')
 
   return (
     <>
       <DesktopIcons />
       <Desktop>
-        <Hero />
-        <About />
-        <Tech />
-        <Projects />
-        <Contact />
+        <Hero
+          isActive={activeWindow === 'hero'}
+          onActivate={() => setActiveWindow('hero')}
+        />
+        {/* <About
+          isActive={activeWindow === 'about'}
+          onActivate={() => setActiveWindow('about')}
+        /> */}
+        <Tech
+          isActive={activeWindow === 'tech'}
+          onActivate={() => setActiveWindow('tech')}
+        />
+        <Projects
+          isActive={activeWindow === 'projects'}
+          onActivate={() => setActiveWindow('projects')}
+        />
+        <Contact
+          isActive={activeWindow === 'contact'}
+          onActivate={() => setActiveWindow('contact')}
+        />
       </Desktop>
       <Taskbar
         onStartToggle={() => setStartMenuOpen((state) => !state)}

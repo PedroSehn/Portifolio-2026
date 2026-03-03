@@ -1,7 +1,12 @@
 import Button from '../ui/Button'
 import Window from '../ui/Window'
 
-export default function Hero() {
+interface HeroProps {
+  isActive?: boolean
+  onActivate?: () => void
+}
+
+export default function Hero({ isActive, onActivate }: HeroProps) {
   return (
     <section id="hero" aria-labelledby="hero-title">
       <Window
@@ -13,6 +18,8 @@ export default function Hero() {
           '12+ clientes',
         ]}
         className="grid gap-6"
+        isActive={isActive}
+        onActivate={onActivate}
       >
         <div className="grid gap-4">
           <p className="text-[10px] uppercase tracking-[0.2em] text-win-dark">

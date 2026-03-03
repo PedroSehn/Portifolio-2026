@@ -1,10 +1,15 @@
 import Button from '../ui/Button'
 import Window from '../ui/Window'
 
-export default function About() {
+interface AboutProps {
+  isActive?: boolean
+  onActivate?: () => void
+}
+
+export default function About({ isActive, onActivate }: AboutProps) {
   return (
     <section id="about" aria-labelledby="about-title">
-      <Window icon="👤" title="Sobre Mim" className="grid">
+      <Window icon="👤" title="Sobre Mim" className="grid" isActive={isActive} onActivate={onActivate}>
         <div className="grid md:grid-cols-[auto,1fr] gap-6">
           <div
             className="w-[180px] h-[220px] bg-gradient-to-br from-[#a0a0a0] to-[#d0d0d0] shadow-sunken flex flex-col items-center justify-center gap-2"
