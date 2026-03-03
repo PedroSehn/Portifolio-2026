@@ -18,7 +18,11 @@ export default function StartMenu({ isOpen, onClose }: StartMenuProps) {
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       const target = event.target as Element | null
-      if (target && !target.closest('.start-menu')) {
+      if (
+        target &&
+        !target.closest('.start-menu') &&
+        !target.closest('.taskbar__start-btn')
+      ) {
         onClose()
       }
     }
