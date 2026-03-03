@@ -6,12 +6,10 @@ interface StartMenuProps {
 }
 
 const menuItems = [
-  { label: '💻 Portfólio', href: '#hero' },
-  // { label: '👤 Sobre Mim', href: '#about' },
+  { label: '👤 Sobre Mim', href: '#about' },
   { label: '⚙️ Tecnologias', href: '#tech' },
   { label: '📁 Projetos', href: '#projects' },
   { label: '✉️ Contato', href: '#contact' },
-  { label: '🔌 Desligar', href: '#' },
 ]
 
 export default function StartMenu({ isOpen, onClose }: StartMenuProps) {
@@ -41,18 +39,36 @@ export default function StartMenu({ isOpen, onClose }: StartMenuProps) {
       role="menu"
       aria-label="Menu Iniciar"
     >
-      <div aria-hidden="true" className="start-menu__banner w-[26px] bg-gradient-to-t from-win-navy to-win-blue" />
-      <div className="p-2">
+      <div className="start-menu__banner" aria-hidden="true">
+        <span className="start-menu__banner-text">Windows</span>
+      </div>
+      <div className="start-menu__items">
         {menuItems.map((item) => (
           <a
             key={item.label}
             href={item.href}
-            className="block px-3 py-2 text-[11px] font-bold hover:bg-win-navy hover:text-white"
+            className="start-menu__item"
             role="menuitem"
+            onClick={onClose}
           >
             {item.label}
           </a>
         ))}
+        <div className="start-menu__separator" aria-hidden="true" />
+        <div
+          className="start-menu__item"
+          role="menuitem"
+          onClick={onClose}
+          tabIndex={0}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault()
+              onClose()
+            }
+          }}
+        >
+          <span>🔌&nbsp; Desligar</span>
+        </div>
       </div>
     </div>
   )

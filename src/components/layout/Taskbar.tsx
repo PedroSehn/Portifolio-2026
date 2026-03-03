@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { useClock } from '../../hooks/useClock'
 
 interface TaskbarProps {
@@ -15,6 +16,17 @@ const navLinks = [
 
 export default function Taskbar({ onStartToggle, startMenuOpen }: TaskbarProps) {
   const clock = useClock()
+  const [isAnimating, setIsAnimating] = useState(false)
+
+  useEffect(() => {
+    if (!isAnimating) return undefined
+
+    const timer = window.setTimeout(() => {
+      setIsAnimating(false)
+    }, 220)
+
+    return () => window.clearTimeout(timer)
+  }, [isAnimating])
 
   return (
     <footer
@@ -24,9 +36,12 @@ export default function Taskbar({ onStartToggle, startMenuOpen }: TaskbarProps) 
     >
       <button
         type="button"
-        className="taskbar__start-btn inline-flex items-center gap-2 px-3 py-1 bg-win-gray shadow-raised h-[22px] text-[11px] font-bold"
+        className={`taskbar__start-btn inline-flex items-center gap-2 px-3 py-1 bg-win-gray shadow-raised h-[22px] text-[11px] font-bold ${
+          isAnimating ? 'taskbar__start-btn--active' : ''
+        }`}
         onClick={(event) => {
           event.stopPropagation()
+          setIsAnimating(true)
           onStartToggle()
         }}
         aria-haspopup="true"
