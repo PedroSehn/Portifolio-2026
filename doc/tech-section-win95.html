@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tecnologias — Win95 Explorer</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gray:    #c0c0c0;
+      --dark:    #808080;
+      --darker:  #404040;
+      --white:   #ffffff;
+      --black:   #000000;
+      --navy:    #000080;
+      --teal-bg: #008080;
+      --font:    'Tahoma', 'MS Sans Serif', Arial, sans-serif;
+
+      --raised:
+        inset -1px -1px 0 #404040,
+        inset  1px  1px 0 #ffffff,
+        inset -2px -2px 0 #808080,
+        inset  2px  2px 0 #dfdfdf;
+      --sunken:
+        inset  1px  1px 0 #404040,
+        inset -1px -1px 0 #ffffff,
+        inset  2px  2px 0 #808080,
+        inset -2px -2px 0 #dfdfdf;
+    }
+
+    html { font-size: 11px; }
+
+    body {
+      background: var(--teal-bg);
+      font-family: var(--font);
+      color: var(--black);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    /* ── WINDOW ─────────────────────────────────────────── */
+    .window {
+      background: var(--gray);
+      border: 2px solid;
+      border-color: var(--white) var(--dark) var(--dark) var(--white);
+      box-shadow: 2px 2px 0 var(--black);
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      max-width: 600px;
+      animation: windowOpen 0.18s ease-out;
+    }
+
+    @keyframes windowOpen {
+      from { transform: scale(0.97) translateY(6px); opacity: 0.5; }
+      to   { transform: scale(1)    translateY(0);   opacity: 1;   }
+    }
+
+    /* ── TITLE BAR ──────────────────────────────────────── */
+    .titlebar {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 5px;
+      user-select: none;
+      cursor: default;
+    }
+
+    /* Ativa: gradiente azul */
+    .titlebar--active   { background: linear-gradient(90deg, #000080, #1084d0); }
+    /* Inativa: cinza sem gradiente */
+    .titlebar--inactive { background: var(--dark); }
+
+    .titlebar__icon { font-size: 14px; line-height: 1; }
+
+    .titlebar__text {
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .titlebar__controls { display: flex; gap: 2px; }
+
+    .titlebar__btn {
+      width: 16px; height: 14px;
+      background: var(--gray);
+      box-shadow: var(--raised);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      font-family: var(--font);
+      flex-shrink: 0;
+      padding: 0;
+    }
+    .titlebar__btn:active { box-shadow: var(--sunken); }
+
+    /* Ícone de minimizar: linha horizontal */
+    .titlebar__btn--min::before {
+      content: '';
+      display: block;
+      width: 6px;
+      height: 1px;
+      background: var(--black);
+      margin-top: 6px;
+    }
+
+    /* Ícone de maximizar: quadrado com borda grossa no topo */
+    .titlebar__btn--max::before {
+      content: '';
+      display: block;
+      width: 7px; height: 6px;
+      border: 1px solid var(--black);
+      border-top-width: 2px;
+    }
+
+    /* ── MENU BAR ───────────────────────────────────────── */
+    .menubar {
+      display: flex;
+      padding: 1px 2px;
+      border-bottom: 1px solid var(--dark);
+      gap: 0;
+    }
+
+    .menubar__item {
+      padding: 2px 6px;
+      font-size: 11px;
+      cursor: default;
+      user-select: none;
+    }
+    .menubar__item:hover {
+      background: var(--navy);
+      color: white;
+    }
+    .menubar__item u { text-decoration: underline; }
+
+    /* ── EXPLORER LAYOUT ────────────────────────────────── */
+    .explorer {
+      display: flex;
+      min-height: 200px;
+    }
+
+    /* Sidebar */
+    .explorer__sidebar {
+      min-width: 130px;
+      border-right: 1px solid var(--dark);
+      box-shadow: 1px 0 0 var(--white);
+      background: var(--gray);
+      overflow-y: auto;
+      flex-shrink: 0;
+    }
+
+    .explorer__sidebar-header {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-bottom: 1px solid var(--dark);
+      background: var(--gray);
+      user-select: none;
+    }
+
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 8px;
+      font-size: 11px;
+      cursor: default;
+      user-select: none;
+    }
+    .sidebar-item:hover:not(.sidebar-item--active) {
+      background: rgba(0,0,0,0.06);
+    }
+    .sidebar-item--active {
+      background: var(--navy);
+      color: white;
+    }
+
+    /* Content area */
+    .explorer__content {
+      flex: 1;
+      background: white;
+      box-shadow: var(--sunken);
+      padding: 8px;
+      overflow-y: auto;
+    }
+
+    .file-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      align-content: flex-start;
+    }
+
+    /* File icon */
+    .file-icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      width: 72px;
+      padding: 6px 4px;
+      cursor: default;
+      user-select: none;
+      border: 1px solid transparent;
+    }
+    .file-icon:hover {
+      background: rgba(0, 0, 128, 0.08);
+      border-color: rgba(0, 0, 128, 0.2);
+    }
+    .file-icon:focus,
+    .file-icon.selected {
+      background: var(--navy);
+      color: white;
+      border-color: var(--navy);
+      outline: none;
+    }
+
+    .file-icon__img  { font-size: 28px; line-height: 1; }
+    .file-icon__name {
+      font-size: 10px;
+      text-align: center;
+      line-height: 1.3;
+      word-break: break-word;
+    }
+
+    /* ── STATUS BAR ─────────────────────────────────────── */
+    .statusbar {
+      display: flex;
+      border-top: 1px solid var(--dark);
+      padding: 2px 4px;
+      gap: 4px;
+    }
+
+    .statusbar__cell {
+      box-shadow: var(--sunken);
+      padding: 1px 8px;
+      font-size: 10px;
+      color: var(--darker);
+    }
+
+    /* ── RESPONSIVE ─────────────────────────────────────── */
+    @media (max-width: 480px) {
+      .explorer { flex-direction: column; }
+      .explorer__sidebar {
+        min-width: unset;
+        border-right: none;
+        border-bottom: 1px solid var(--dark);
+        box-shadow: 0 1px 0 var(--white);
+        display: flex;
+        overflow-x: auto;
+        overflow-y: visible;
+      }
+      .explorer__sidebar-header { display: none; }
+      .sidebar-item { white-space: nowrap; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="window" id="window" onclick="activateWindow()">
+
+    <!-- Title Bar -->
+    <div class="titlebar titlebar--active" id="titlebar">
+      <span class="titlebar__icon" aria-hidden="true">📁</span>
+      <span class="titlebar__text">Explorador — Tecnologias</span>
+      <div class="titlebar__controls" aria-hidden="true">
+        <button class="titlebar__btn titlebar__btn--min" tabindex="-1" aria-label="Minimizar"></button>
+        <button class="titlebar__btn titlebar__btn--max" tabindex="-1" aria-label="Maximizar"></button>
+        <button class="titlebar__btn" tabindex="-1" aria-label="Fechar" style="font-size:9px;font-weight:700;">✕</button>
+      </div>
+    </div>
+
+    <!-- Menu Bar -->
+    <nav class="menubar" aria-label="Menu da janela">
+      <span class="menubar__item"><u>A</u>rquivo</span>
+      <span class="menubar__item"><u>E</u>ditar</span>
+      <span class="menubar__item">E<u>x</u>ibir</span>
+      <span class="menubar__item">A<u>j</u>uda</span>
+    </nav>
+
+    <!-- Explorer -->
+    <div class="explorer">
+
+      <!-- Sidebar -->
+      <aside class="explorer__sidebar" aria-label="Categorias">
+        <div class="explorer__sidebar-header">Todas as Pastas</div>
+        <ul style="list-style:none" role="listbox" aria-label="Categorias de tecnologia">
+          <li class="sidebar-item sidebar-item--active" role="option" aria-selected="true"  data-cat="Frontend" tabindex="0">
+            <span aria-hidden="true">📂</span> Frontend
+          </li>
+          <li class="sidebar-item" role="option" aria-selected="false" data-cat="Backend"  tabindex="0">
+            <span aria-hidden="true">📂</span> Backend
+          </li>
+          <li class="sidebar-item" role="option" aria-selected="false" data-cat="DevOps"   tabindex="0">
+            <span aria-hidden="true">📂</span> DevOps
+          </li>
+        </ul>
+      </aside>
+
+      <!-- Content -->
+      <main class="explorer__content" id="content" aria-label="Tecnologias da categoria selecionada">
+        <div class="file-grid" id="file-grid"></div>
+      </main>
+
+    </div>
+
+    <!-- Status Bar -->
+    <footer class="statusbar">
+      <span class="statusbar__cell" id="status">6 objetos</span>
+    </footer>
+
+  </div>
+
+  <script>
+    // ── Dados ──────────────────────────────────────────────
+    const data = {
+      Frontend: [
+        { name: 'JavaScript', icon: '📜' },
+        { name: 'TypeScript', icon: '🔷' },
+        { name: 'React',      icon: '⚛️'  },
+        { name: 'HTML5',      icon: '🌐'  },
+        { name: 'CSS3',       icon: '🎨'  },
+        { name: 'Next.js',    icon: '▲'   },
+      ],
+      Backend: [
+        { name: 'Node.js',    icon: '💚'  },
+        { name: 'Python',     icon: '🐍'  },
+        { name: 'PostgreSQL', icon: '🐘'  },
+        { name: 'MongoDB',    icon: '🍃'  },
+        { name: 'REST API',   icon: '🔗'  },
+        { name: 'GraphQL',    icon: '◈'   },
+      ],
+      DevOps: [
+        { name: 'Docker',     icon: '🐳'  },
+        { name: 'Git',        icon: '🔧'  },
+        { name: 'Linux',      icon: '🐧'  },
+        { name: 'AWS',        icon: '☁️'  },
+        { name: 'CI/CD',      icon: '🔄'  },
+        { name: 'Nginx',      icon: '⚡'  },
+      ],
+    };
+
+    // ── Estado ─────────────────────────────────────────────
+    let activeCategory = 'Frontend';
+    let windowActive   = true;
+
+    // ── Refs ───────────────────────────────────────────────
+    const titlebar   = document.getElementById('titlebar');
+    const fileGrid   = document.getElementById('file-grid');
+    const statusCell = document.getElementById('status');
+    const sideItems  = document.querySelectorAll('.sidebar-item');
+
+    // ── Renderiza ícones de arquivo ────────────────────────
+    function renderFiles(category) {
+      const techs = data[category];
+      fileGrid.innerHTML = '';
+
+      techs.forEach(tech => {
+        const item = document.createElement('div');
+        item.className   = 'file-icon';
+        item.tabIndex    = 0;
+        item.setAttribute('role', 'option');
+        item.innerHTML   = `
+          <span class="file-icon__img" aria-hidden="true">${tech.icon}</span>
+          <span class="file-icon__name">${tech.name}</span>
+        `;
+
+        // Seleciona ao clicar (comportamento Win95)
+        item.addEventListener('click', (e) => {
+          e.stopPropagation();
+          fileGrid.querySelectorAll('.file-icon').forEach(el => el.classList.remove('selected'));
+          item.classList.add('selected');
+        });
+
+        fileGrid.appendChild(item);
+      });
+
+      statusCell.textContent = `${techs.length} objetos`;
+    }
+
+    // ── Troca de categoria ─────────────────────────────────
+    function selectCategory(category) {
+      activeCategory = category;
+
+      sideItems.forEach(item => {
+        const isActive = item.dataset.cat === category;
+        item.classList.toggle('sidebar-item--active', isActive);
+        item.setAttribute('aria-selected', String(isActive));
+      });
+
+      renderFiles(category);
+    }
+
+    // ── Eventos da sidebar ─────────────────────────────────
+    sideItems.forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.stopPropagation();
+        selectCategory(item.dataset.cat);
+      });
+
+      // Suporte a teclado
+      item.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          selectCategory(item.dataset.cat);
+        }
+      });
+    });
+
+    // ── Janela ativa / inativa ─────────────────────────────
+    function activateWindow() {
+      windowActive = true;
+      titlebar.classList.replace('titlebar--inactive', 'titlebar--active');
+    }
+
+    // Clique fora da janela desativa
+    document.addEventListener('click', () => {
+      windowActive = false;
+      titlebar.classList.replace('titlebar--active', 'titlebar--inactive');
+    });
+
+    // ── Init ───────────────────────────────────────────────
+    renderFiles(activeCategory);
+  </script>
+
+</body>
+</html>
