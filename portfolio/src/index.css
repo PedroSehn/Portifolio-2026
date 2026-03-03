@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html { scroll-behavior: smooth; font-size: 11px; }
+
+/* Scrollbar estilo Win98 */
+::-webkit-scrollbar       { width: 16px; }
+::-webkit-scrollbar-track { @apply bg-win-gray shadow-sunken; }
+::-webkit-scrollbar-thumb { @apply bg-win-gray shadow-raised; }
+
+/* Syntax highlight do bloco de codigo no Hero */
+.ck { color: #b0b0ff; }
+.cf { color: #80ffff; }
+.cs { color: #ffff80; }
+.cc { color: #80ff80; }
+.cn { color: #ff80c0; }
+.cp { color: #ffffff; }
