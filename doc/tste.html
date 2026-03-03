@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>portfolio.exe — Fullstack Developer</title>
+  <style>
+    /* ===========================================
+       RESET
+    =========================================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ===========================================
+       DESIGN TOKENS
+       Toda a identidade visual do tema Win98 vive
+       aqui em custom properties.
+    =========================================== */
+    :root {
+      --gray:    #c0c0c0;
+      --dark:    #808080;
+      --darker:  #404040;
+      --white:   #ffffff;
+      --black:   #000000;
+      --navy:    #000080;
+      --teal-bg: #008080;
+      --font:    'Tahoma', 'MS Sans Serif', Arial, sans-serif;
+
+      /*
+        Ilusão de profundidade 3D clássica do Win98:
+        raised = botão elevado
+        sunken = input / área recuada
+      */
+      --raised:
+        inset -1px -1px 0 #404040,
+        inset  1px  1px 0 #ffffff,
+        inset -2px -2px 0 #808080,
+        inset  2px  2px 0 #dfdfdf;
+      --sunken:
+        inset  1px  1px 0 #404040,
+        inset -1px -1px 0 #ffffff,
+        inset  2px  2px 0 #808080,
+        inset -2px -2px 0 #dfdfdf;
+    }
+
+    /* ===========================================
+       BASE
+    =========================================== */
+    html { scroll-behavior: smooth; font-size: 11px; }
+
+    body {
+      background: var(--teal-bg);
+      font-family: var(--font);
+      color: var(--black);
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding-bottom: 30px; /* espaço para a taskbar fixa */
+    }
+
+    /* Scrollbar estilo Win98 */
+    ::-webkit-scrollbar { width: 16px; }
+    ::-webkit-scrollbar-track { background: var(--gray); box-shadow: var(--sunken); }
+    ::-webkit-scrollbar-thumb { background: var(--gray); box-shadow: var(--raised); }
+
+    /* ===========================================
+       ÁREA DE TRABALHO
+    =========================================== */
+    #desktop {
+      min-height: calc(100vh - 30px);
+      padding: 20px 24px 40px 100px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* ===========================================
+       ÍCONES DE DESKTOP (coluna fixa à esquerda)
+    =========================================== */
+    .desktop-icons {
+      position: fixed;
+      top: 20px;
+      left: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      z-index: 10;
+    }
+
+    .desktop-icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      width: 68px;
+      text-decoration: none;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .desktop-icon__img {
+      font-size: 30px;
+      line-height: 1;
+      filter: drop-shadow(1px 1px 0 rgba(0,0,0,0.5));
+    }
+
+    .desktop-icon__label {
+      color: white;
+      font-size: 11px;
+      text-align: center;
+      text-shadow: 1px 1px 1px black;
+      padding: 1px 3px;
+      line-height: 1.3;
+    }
+
+    .desktop-icon:hover .desktop-icon__label {
+      background: var(--navy);
+      outline: 1px dotted #9090ff;
+    }
+
+    /* ===========================================
+       JANELA (componente base reutilizável)
+    =========================================== */
+    .window {
+      background: var(--gray);
+      border: 2px solid;
+      border-color: var(--white) var(--dark) var(--dark) var(--white);
+      box-shadow: 2px 2px 0 var(--black);
+      animation: windowOpen 0.18s ease-out;
+    }
+
+    @keyframes windowOpen {
+      from { transform: scale(0.97) translateY(6px); opacity: 0.5; }
+      to   { transform: scale(1)    translateY(0);   opacity: 1;   }
+    }
+
+    /* --- Title bar --- */
+    .window__titlebar {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 5px;
+      background: linear-gradient(90deg, #000080, #1084d0);
+      user-select: none;
+    }
+
+    .window__titlebar-icon { font-size: 14px; line-height: 1; }
+
+    .window__titlebar-text {
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .window__controls { display: flex; gap: 2px; }
+
+    .window__control-btn {
+      width: 16px; height: 14px;
+      background: var(--gray);
+      box-shadow: var(--raised);
+      border: none;
+      font-size: 9px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font);
+      padding: 0;
+      flex-shrink: 0;
+    }
+    .window__control-btn:active { box-shadow: var(--sunken); }
+
+    /* --- Body & footer da janela --- */
+    .window__body { padding: 20px 24px; }
+
+    .window__statusbar {
+      display: flex;
+      border-top: 1px solid var(--dark);
+      padding: 2px 4px;
+      gap: 4px;
+    }
+
+    .window__status-cell {
+      box-shadow: var(--sunken);
+      padding: 1px 8px;
+      font-size: 10px;
+      color: var(--darker);
+    }
+
+    /* ===========================================
+       UTILITÁRIOS
+    =========================================== */
+
+    .win-divider {
+      height: 1px;
+      background: var(--dark);
+      box-shadow: 0 1px 0 var(--white);
+      margin: 14px 0;
+      border: none;
+    }
+
+    /* Botão Win98 */
+    .btn {
+      padding: 5px 18px;
+      background: var(--gray);
+      box-shadow: var(--raised);
+      border: none;
+      font-family: var(--font);
+      font-size: 11px;
+      cursor: pointer;
+      text-decoration: none;
+      color: var(--black);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      user-select: none;
+    }
+    .btn:hover  { background: #d4d4d4; }
+    .btn:active { box-shadow: var(--sunken); }
+
+    .btn--primary {
+      box-shadow: var(--raised), 0 0 0 1px var(--black);
+      font-weight: 700;
+    }
+
+    /* Inputs */
+    .input, .textarea {
+      background: white;
+      box-shadow: var(--sunken);
+      border: none;
+      padding: 4px 6px;
+      font-family: var(--font);
+      font-size: 11px;
+      color: var(--black);
+      outline: none;
+      width: 100%;
+    }
+    .input:focus, .textarea:focus {
+      outline: 1px dotted var(--black);
+      outline-offset: -2px;
+    }
+    .textarea { resize: vertical; height: 110px; }
+
+    .form-label {
+      font-size: 10px;
+      color: var(--darker);
+      margin-bottom: 3px;
+      display: block;
+    }
+    .form-field { display: flex; flex-direction: column; }
+
+    /* Group box */
+    .groupbox {
+      border: 1px solid var(--dark);
+      box-shadow: inset 1px 1px 0 var(--white);
+      padding: 16px 12px 12px;
+      position: relative;
+    }
+    .groupbox__legend {
+      position: absolute;
+      top: -7px; left: 10px;
+      background: var(--gray);
+      padding: 0 4px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    /* Barra de progresso */
+    .progress {
+      background: white;
+      box-shadow: var(--sunken);
+      height: 14px;
+      overflow: hidden;
+    }
+    .progress__fill {
+      height: 100%;
+      background: repeating-linear-gradient(
+        90deg,
+        #000080 0px, #000080 8px,
+        #1084d0 8px, #1084d0 12px
+      );
+      width: 0;
+      transition: width 1.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .progress__fill--animated { width: var(--progress-width); }
+
+    /* Tag de tecnologia */
+    .tag {
+      display: inline-block;
+      background: var(--gray);
+      box-shadow: var(--raised);
+      padding: 1px 7px;
+      font-size: 10px;
+      margin: 2px 2px 2px 0;
+      cursor: default;
+    }
+
+    /* ===========================================
+       ANIMAÇÕES
+    =========================================== */
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 0.45s ease, transform 0.45s ease;
+    }
+    .reveal--visible  { opacity: 1; transform: translateY(0); }
+    .reveal--delay-1  { transition-delay: 0.08s; }
+    .reveal--delay-2  { transition-delay: 0.16s; }
+    .reveal--delay-3  { transition-delay: 0.24s; }
+
+    /* Entrada do hero */
+    .hero-animate {
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeUp 0.4s ease forwards;
+    }
+    .hero-animate:nth-child(1) { animation-delay: 0.10s; }
+    .hero-animate:nth-child(2) { animation-delay: 0.22s; }
+    .hero-animate:nth-child(3) { animation-delay: 0.34s; }
+    .hero-animate:nth-child(4) { animation-delay: 0.46s; }
+
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+    /* Cursor piscante */
+    .blink-cursor {
+      display: inline-block;
+      width: 8px; height: 13px;
+      background: #c0c0c0;
+      vertical-align: middle;
+      margin-left: 2px;
+      animation: blink 1.1s step-end infinite;
+    }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+    /* Ponto pulsante (status online) */
+    .pulse-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #00cc44;
+      display: inline-block;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0   rgba(0,204,68,0.6); }
+      50%       { box-shadow: 0 0 0 5px rgba(0,204,68,0);   }
+    }
+
+    /* ===========================================
+       GRIDS DE LAYOUT
+    =========================================== */
+    .grid-2          { display: grid; grid-template-columns: 1fr 1fr;      gap: 28px; align-items: center; }
+    .grid-2--auto    { display: grid; grid-template-columns: auto 1fr;     gap: 28px; align-items: start;  }
+    .grid-2--contact { display: grid; grid-template-columns: 1.1fr 0.9fr;  gap: 28px; align-items: start;  }
+    .grid-3          { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
+    .grid-4          { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; }
+
+    /* ===========================================
+       SEÇÃO: HERO
+    =========================================== */
+    .hero-name {
+      font-size: 48px;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -2px;
+      color: var(--black);
+      margin-bottom: 4px;
+    }
+    .hero-role {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 20px;
+    }
+    .hero-available {
+      font-size: 10px;
+      color: #404040;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .hero-buttons { display: flex; gap: 8px; }
+
+    /* Bloco de código decorativo */
+    .code-block {
+      background: #000;
+      color: #c0c0c0;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      line-height: 1.9;
+      padding: 14px 16px;
+      box-shadow: var(--sunken);
+      white-space: pre;
+    }
+    .ck { color: #b0b0ff; } /* keyword    */
+    .cf { color: #80ffff; } /* function   */
+    .cs { color: #ffff80; } /* string     */
+    .cc { color: #80ff80; } /* comment    */
+    .cn { color: #ff80c0; } /* number     */
+    .cp { color: #ffffff; } /* punctuation */
+
+    /* ===========================================
+       SEÇÃO: SOBRE
+    =========================================== */
+    .photo-placeholder {
+      width: 180px; height: 220px;
+      background: linear-gradient(145deg, #a0a0a0, #d0d0d0);
+      box-shadow: var(--sunken);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .photo-placeholder__initials {
+      font-size: 52px;
+      font-weight: 700;
+      color: #404040;
+      letter-spacing: -2px;
+    }
+    .photo-placeholder__caption {
+      font-size: 9px;
+      color: #606060;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .about-name   { font-size: 22px; font-weight: 700; margin-bottom: 4px; letter-spacing: -1px; }
+    .about-role   { font-size: 13px; color: var(--navy); font-weight: 700; margin-bottom: 16px; }
+    .about-bio    { font-size: 12px; line-height: 1.8; color: #202020; margin-bottom: 16px; }
+    .about-social { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    /* ===========================================
+       SEÇÃO: TECNOLOGIAS
+    =========================================== */
+    .tech-card {
+      box-shadow: var(--raised);
+      background: var(--gray);
+      padding: 10px 10px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      cursor: default;
+    }
+    .tech-card__name    { font-weight: 700; font-size: 11px; }
+    .tech-card__percent { font-size: 10px; color: #606060; text-align: right; }
+
+    /* ===========================================
+       SEÇÃO: PROJETOS
+    =========================================== */
+    .project-card {
+      box-shadow: var(--raised);
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      background: var(--gray);
+    }
+    .project-preview { margin-bottom: 10px; }
+    .project-preview__screen {
+      height: 90px;
+      box-shadow: var(--sunken);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .project-preview__lines { display: flex; flex-direction: column; gap: 5px; width: 75%; }
+    .project-preview__line  { height: 7px; }
+
+    .project-card__title   { font-weight: 700; font-size: 12px; margin-bottom: 5px; }
+    .project-card__desc    { font-size: 11px; color: #404040; line-height: 1.6; margin-bottom: 8px; flex: 1; }
+    .project-card__tags    { margin-bottom: 10px; }
+    .project-card__actions { display: flex; gap: 6px; }
+    .project-card__actions .btn { flex: 1; justify-content: center; font-size: 10px; }
+
+    /* ===========================================
+       SEÇÃO: CONTATO
+    =========================================== */
+    .contact-form      { display: flex; flex-direction: column; gap: 10px; }
+    .contact-form__row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    .contact-info-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: white;
+      box-shadow: var(--sunken);
+      padding: 6px 8px;
+    }
+    .contact-info-item__icon  { font-size: 20px; }
+    .contact-info-item__label { font-size: 9px; color: #808080; text-transform: uppercase; letter-spacing: 0.08em; }
+    .contact-info-item__value { font-size: 11px; color: #0000ee; text-decoration: underline; }
+
+    .contact-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 14px;
+      padding: 8px 10px;
+      box-shadow: var(--sunken);
+      background: white;
+      font-size: 11px;
+    }
+
+    /* ===========================================
+       TASKBAR
+    =========================================== */
+    .taskbar {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      height: 30px;
+      background: var(--gray);
+      border-top: 2px solid var(--white);
+      box-shadow: inset 0 1px 0 var(--white);
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      padding: 2px 3px;
+      z-index: 9999;
+    }
+
+    .taskbar__start-btn {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 2px 8px;
+      background: var(--gray);
+      box-shadow: var(--raised);
+      border: none;
+      font-family: var(--font);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      height: 22px;
+      user-select: none;
+      flex-shrink: 0;
+    }
+    .taskbar__start-btn:active { box-shadow: var(--sunken); }
+
+    /* Logo Windows 4 quadrantes */
+    .win-logo {
+      width: 16px; height: 16px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      flex-shrink: 0;
+    }
+    .win-logo__q:nth-child(1) { background: #ff2020; }
+    .win-logo__q:nth-child(2) { background: #20aa20; }
+    .win-logo__q:nth-child(3) { background: #2020ff; }
+    .win-logo__q:nth-child(4) { background: #ffaa00; }
+
+    .taskbar__separator {
+      width: 1px; height: 22px;
+      background: var(--dark);
+      box-shadow: 1px 0 0 var(--white);
+      margin: 0 3px;
+      flex-shrink: 0;
+    }
+
+    .taskbar__btn {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 2px 8px;
+      background: var(--gray);
+      box-shadow: var(--raised);
+      border: none;
+      font-family: var(--font);
+      font-size: 11px;
+      cursor: pointer;
+      height: 22px;
+      text-decoration: none;
+      color: var(--black);
+      white-space: nowrap;
+      user-select: none;
+      flex-shrink: 1;
+      overflow: hidden;
+    }
+    .taskbar__btn:hover  { background: #d0d0d0; }
+    .taskbar__btn:active { box-shadow: var(--sunken); }
+
+    .taskbar__clock {
+      margin-left: auto;
+      padding: 1px 10px;
+      box-shadow: var(--sunken);
+      font-size: 11px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      user-select: none;
+      flex-shrink: 0;
+    }
+
+    /* ===========================================
+       MENU INICIAR
+    =========================================== */
+    .start-menu {
+      position: fixed;
+      bottom: 30px; left: 0;
+      width: 220px;
+      background: var(--gray);
+      border: 2px solid;
+      border-color: var(--white) var(--dark) var(--dark) var(--white);
+      box-shadow: 2px 2px 0 var(--black);
+      z-index: 10000;
+      display: flex;
+      transform-origin: bottom left;
+      animation: menuPop 0.12s ease-out;
+    }
+    .start-menu[hidden] { display: none; }
+
+    @keyframes menuPop {
+      from { transform: scaleY(0.6); opacity: 0; }
+      to   { transform: scaleY(1);   opacity: 1; }
+    }
+
+    .start-menu__banner {
+      width: 26px;
+      background: linear-gradient(to top, #000080, #1084d0);
+      display: flex;
+      align-items: flex-end;
+      padding: 8px 5px;
+      flex-shrink: 0;
+    }
+    .start-menu__banner-text {
+      color: white;
+      font-size: 13px;
+      font-weight: 700;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      letter-spacing: 2px;
+      user-select: none;
+    }
+
+    .start-menu__items { flex: 1; padding: 4px 0; }
+
+    .start-menu__item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 14px;
+      font-size: 11px;
+      cursor: pointer;
+      user-select: none;
+      text-decoration: none;
+      color: var(--black);
+    }
+    .start-menu__item:hover { background: var(--navy); color: white; }
+
+    .start-menu__separator {
+      height: 1px;
+      background: var(--dark);
+      box-shadow: 0 1px 0 var(--white);
+      margin: 3px 6px;
+    }
+
+    /* ===========================================
+       RESPONSIVO
+    =========================================== */
+    @media (max-width: 860px) {
+      #desktop { padding: 14px 14px 40px 14px; }
+      .desktop-icons { display: none; }
+      .grid-2, .grid-2--auto, .grid-2--contact { grid-template-columns: 1fr; }
+      .grid-3 { grid-template-columns: 1fr 1fr; }
+      .photo-placeholder { width: 100%; max-width: 260px; height: 200px; }
+    }
+    @media (max-width: 540px) {
+      .grid-3 { grid-template-columns: 1fr; }
+      .grid-4 { grid-template-columns: repeat(2, 1fr); }
+      .contact-form__row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =====================================================
+       ÍCONES DE DESKTOP
+  ====================================================== -->
+  <nav class="desktop-icons" aria-label="Atalhos da área de trabalho">
+    <a href="#hero"     class="desktop-icon">
+      <span class="desktop-icon__img" aria-hidden="true">💼</span>
+      <span class="desktop-icon__label">Portfólio</span>
+    </a>
+    <a href="#projects" class="desktop-icon">
+      <span class="desktop-icon__img" aria-hidden="true">📁</span>
+      <span class="desktop-icon__label">Projetos</span>
+    </a>
+    <a href="#contact"  class="desktop-icon">
+      <span class="desktop-icon__img" aria-hidden="true">✉️</span>
+      <span class="desktop-icon__label">Contato</span>
+    </a>
+    <a href="#"         class="desktop-icon">
+      <span class="desktop-icon__img" aria-hidden="true">🐙</span>
+      <span class="desktop-icon__label">GitHub</span>
+    </a>
+  </nav>
+
+  <!-- =====================================================
+       MENU INICIAR (oculto por padrão)
+  ====================================================== -->
+  <div class="start-menu" id="start-menu" hidden role="menu" aria-label="Menu Iniciar">
+    <div class="start-menu__banner" aria-hidden="true">
+      <span class="start-menu__banner-text">Windows</span>
+    </div>
+    <div class="start-menu__items">
+      <a href="#hero"     class="start-menu__item" role="menuitem">💻&nbsp; Portfólio</a>
+      <a href="#about"    class="start-menu__item" role="menuitem">👤&nbsp; Sobre Mim</a>
+      <a href="#tech"     class="start-menu__item" role="menuitem">⚙️&nbsp; Tecnologias</a>
+      <a href="#projects" class="start-menu__item" role="menuitem">📁&nbsp; Projetos</a>
+      <a href="#contact"  class="start-menu__item" role="menuitem">✉️&nbsp; Contato</a>
+      <div class="start-menu__separator"></div>
+      <div class="start-menu__item" role="menuitem">🔌&nbsp; Desligar</div>
+    </div>
+  </div>
+
+  <!-- =====================================================
+       ÁREA DE TRABALHO
+  ====================================================== -->
+  <main id="desktop">
+
+    <!-- ── HERO ─────────────────────────────────────────── -->
+    <section id="hero" aria-labelledby="hero-title">
+      <article class="window">
+        <header class="window__titlebar">
+          <span class="window__titlebar-icon" aria-hidden="true">💻</span>
+          <span class="window__titlebar-text">portfolio.exe</span>
+          <div class="window__controls" aria-hidden="true">
+            <button class="window__control-btn" tabindex="-1">_</button>
+            <button class="window__control-btn" tabindex="-1">□</button>
+            <button class="window__control-btn" tabindex="-1">✕</button>
+          </div>
+        </header>
+
+        <div class="window__body">
+          <div class="grid-2">
+
+            <div>
+              <p class="hero-available hero-animate">
+                <span class="pulse-dot" aria-hidden="true"></span>
+                Disponível para projetos
+              </p>
+              <h1 id="hero-title" class="hero-name hero-animate">Seu Nome</h1>
+              <p class="hero-role hero-animate">Fullstack Developer</p>
+              <div class="hero-buttons hero-animate">
+                <a href="#projects" class="btn btn--primary">📁 Ver Projetos</a>
+                <a href="#contact"  class="btn">✉️ Contato</a>
+              </div>
+            </div>
+
+            <!-- Janela de código decorativa -->
+            <div class="hero-animate">
+              <article class="window" style="animation-delay: 0.2s">
+                <header class="window__titlebar">
+                  <span class="window__titlebar-icon" aria-hidden="true">📝</span>
+                  <span class="window__titlebar-text">about_me.ts — Notepad</span>
+                  <div class="window__controls" aria-hidden="true">
+                    <button class="window__control-btn" tabindex="-1">_</button>
+                    <button class="window__control-btn" tabindex="-1">□</button>
+                    <button class="window__control-btn" tabindex="-1">✕</button>
+                  </div>
+                </header>
+                <pre class="code-block" aria-label="Trecho de código decorativo"><span class="ck">const</span> <span class="cf">dev</span> <span class="cp">= {</span>
+  <span class="cs">name</span><span class="cp">:</span>  <span class="cs">"Seu Nome"</span><span class="cp">,</span>
+  <span class="cs">role</span><span class="cp">:</span>  <span class="cs">"Fullstack Dev"</span><span class="cp">,</span>
+  <span class="cs">years</span><span class="cp">:</span> <span class="cn">5</span><span class="cp">,</span>
+  <span class="cf">hire</span><span class="cp">:</span>  <span class="ck">true</span> <span class="cc">// 👋</span>
+<span class="cp">}</span><span class="blink-cursor" aria-hidden="true"></span></pre>
+              </article>
+            </div>
+
+          </div>
+        </div>
+
+        <footer class="window__statusbar">
+          <span class="window__status-cell">5 anos de experiência</span>
+          <span class="window__status-cell">30+ projetos entregues</span>
+          <span class="window__status-cell">12+ clientes</span>
+        </footer>
+      </article>
+    </section>
+
+    <!-- ── SOBRE ─────────────────────────────────────────── -->
+    <section id="about" aria-labelledby="about-title">
+      <article class="window reveal">
+        <header class="window__titlebar">
+          <span class="window__titlebar-icon" aria-hidden="true">👤</span>
+          <span class="window__titlebar-text">Sobre Mim</span>
+          <div class="window__controls" aria-hidden="true">
+            <button class="window__control-btn" tabindex="-1">_</button>
+            <button class="window__control-btn" tabindex="-1">□</button>
+            <button class="window__control-btn" tabindex="-1">✕</button>
+          </div>
+        </header>
+
+        <div class="window__body">
+          <div class="grid-2--auto">
+
+            <div class="reveal" aria-hidden="true">
+              <div class="photo-placeholder">
+                <span class="photo-placeholder__initials">SN</span>
+                <span class="photo-placeholder__caption">Foto do Perfil</span>
+              </div>
+            </div>
+
+            <div class="reveal reveal--delay-1">
+              <h2 id="about-title" class="about-name">Seu Nome</h2>
+              <p class="about-role">Fullstack Developer — 5 anos de experiência</p>
+              <hr class="win-divider" />
+              <p class="about-bio">
+                Construo produtos digitais do banco de dados ao pixel —
+                com foco em código limpo, arquitetura sólida e interfaces
+                que funcionam de verdade.
+              </p>
+              <div class="about-social">
+                <a href="#" class="btn">🐙 GitHub</a>
+                <a href="#" class="btn">💼 LinkedIn</a>
+                <a href="#" class="btn">📧 E-mail</a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <footer class="window__statusbar">
+          <span class="window__status-cell">Brasil</span>
+          <span class="window__status-cell">● Online</span>
+        </footer>
+      </article>
+    </section>
+
+    <!-- ── TECNOLOGIAS ───────────────────────────────────── -->
+    <section id="tech" aria-labelledby="tech-title">
+      <article class="window reveal">
+        <header class="window__titlebar">
+          <span class="window__titlebar-icon" aria-hidden="true">⚙️</span>
+          <span id="tech-title" class="window__titlebar-text">Tecnologias</span>
+          <div class="window__controls" aria-hidden="true">
+            <button class="window__control-btn" tabindex="-1">_</button>
+            <button class="window__control-btn" tabindex="-1">□</button>
+            <button class="window__control-btn" tabindex="-1">✕</button>
+          </div>
+        </header>
+
+        <div class="window__body">
+          <ul class="grid-4" style="list-style: none">
+
+            <li class="tech-card reveal reveal--delay-1" data-tech-row>
+              <span class="tech-card__name">JavaScript</span>
+              <div class="progress" role="progressbar" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress__fill" style="--progress-width: 95%"></div>
+              </div>
+              <span class="tech-card__percent">95%</span>
+            </li>
+
+            <li class="tech-card reveal reveal--delay-2" data-tech-row>
+              <span class="tech-card__name">TypeScript</span>
+              <div class="progress" role="progressbar" aria-valuenow="92" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress__fill" style="--progress-width: 92%"></div>
+              </div>
+              <span class="tech-card__percent">92%</span>
+            </li>
+
+            <li class="tech-card reveal reveal--delay-3" data-tech-row>
+              <span class="tech-card__name">React</span>
+              <div class="progress" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress__fill" style="--progress-width: 90%"></div>
+              </div>
+              <span class="tech-card__percent">90%</span>
+            </li>
+
+            <li class="tech-card reveal reveal--delay-1" data-tech-row>
+              <span class="tech-card__name">Node.js</span>
+              <div class="progress" role="progressbar" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress__fill" style="--progress-width: 88%"></div>
+              </div>
+              <span class="tech-card__percent">88%</span>
+            </li>
+
+            <li class="tech-card reveal reveal--delay-2" data-tech-row>
+              <span class="tech-card__name">PostgreSQL</span>
+              <div class="progress" role="progressbar" aria-valuenow="82" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress__fill" style="--progress-width: 82%"></div>
+              </div>
+              <span class="tech-card__percent">82%</span>
+            </li>
+
+            <li class="tech-card reveal reveal--delay-3" data-tech-row>
+              <span class="tech-card__name">Python</span>
+              <div class="progress" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress__fill" style="--progress-width: 75%"></div>
+              </div>
+              <span class="tech-card__percent">75%</span>
+            </li>
+
+            <li class="tech-card reveal reveal--delay-1" data-tech-row>
+              <span class="tech-card__name">Docker</span>
+              <div class="progress" role="progressbar" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress__fill" style="--progress-width: 78%"></div>
+              </div>
+              <span class="tech-card__percent">78%</span>
+            </li>
+
+            <li class="tech-card reveal reveal--delay-2" data-tech-row>
+              <span class="tech-card__name">Git</span>
+              <div class="progress" role="progressbar" aria-valuenow="93" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress__fill" style="--progress-width: 93%"></div>
+              </div>
+              <span class="tech-card__percent">93%</span>
+            </li>
+
+          </ul>
+        </div>
+
+        <footer class="window__statusbar">
+          <span class="window__status-cell">8 tecnologias</span>
+          <span class="window__status-cell">Todos os dispositivos OK ✔</span>
+        </footer>
+      </article>
+    </section>
+
+    <!-- ── PROJETOS ──────────────────────────────────────── -->
+    <section id="projects" aria-labelledby="projects-title">
+      <article class="window reveal">
+        <header class="window__titlebar">
+          <span class="window__titlebar-icon" aria-hidden="true">📁</span>
+          <span id="projects-title" class="window__titlebar-text">Projetos — Windows Explorer</span>
+          <div class="window__controls" aria-hidden="true">
+            <button class="window__control-btn" tabindex="-1">_</button>
+            <button class="window__control-btn" tabindex="-1">□</button>
+            <button class="window__control-btn" tabindex="-1">✕</button>
+          </div>
+        </header>
+
+        <div class="window__body">
+          <ul class="grid-3" style="list-style: none">
+
+            <!-- Projeto 1 -->
+            <li class="project-card reveal reveal--delay-1">
+              <article class="window project-preview">
+                <header class="window__titlebar" style="background: linear-gradient(90deg, #000080, #00008099)">
+                  <span class="window__titlebar-text" style="font-size: 10px">SaaS Dashboard</span>
+                  <div class="window__controls" aria-hidden="true">
+                    <button class="window__control-btn" style="width:12px;height:11px" tabindex="-1">_</button>
+                    <button class="window__control-btn" style="width:12px;height:11px" tabindex="-1">□</button>
+                    <button class="window__control-btn" style="width:12px;height:11px" tabindex="-1">✕</button>
+                  </div>
+                </header>
+                <div class="project-preview__screen" style="background: linear-gradient(160deg,#00008022,#00000808)" aria-hidden="true">
+                  <div class="project-preview__lines">
+                    <div class="project-preview__line" style="background:#000080;opacity:.5;width:55%"></div>
+                    <div class="project-preview__line" style="background:#000080;opacity:.25;width:100%"></div>
+                    <div class="project-preview__line" style="background:#000080;opacity:.25;width:80%"></div>
+                  </div>
+                </div>
+              </article>
+              <h3 class="project-card__title">SaaS Dashboard</h3>
+              <p class="project-card__desc">Analytics em tempo real para e-commerce com relatórios e permissões granulares.</p>
+              <div class="project-card__tags">
+                <span class="tag">React</span>
+                <span class="tag">Node.js</span>
+                <span class="tag">PostgreSQL</span>
+              </div>
+              <div class="project-card__actions">
+                <a href="#" class="btn">▶ Demo</a>
+                <a href="#" class="btn">🐙 GitHub</a>
+              </div>
+            </li>
+
+            <!-- Projeto 2 -->
+            <li class="project-card reveal reveal--delay-2">
+              <article class="window project-preview">
+                <header class="window__titlebar" style="background: linear-gradient(90deg, #006400, #00640099)">
+                  <span class="window__titlebar-text" style="font-size: 10px">API Gateway</span>
+                  <div class="window__controls" aria-hidden="true">
+                    <button class="window__control-btn" style="width:12px;height:11px" tabindex="-1">_</button>
+                    <button class="window__control-btn" style="width:12px;height:11px" tabindex="-1">□</button>
+                    <button class="window__control-btn" style="width:12px;height:11px" tabindex="-1">✕</button>
+                  </div>
+                </header>
+                <div class="project-preview__screen" style="background: linear-gradient(160deg,#00640022,#00000808)" aria-hidden="true">
+                  <div class="project-preview__lines">
+                    <div class="project-preview__line" style="background:#006400;opacity:.5;width:55%"></div>
+                    <div class="project-preview__line" style="background:#006400;opacity:.25;width:100%"></div>
+                    <div class="project-preview__line" style="background:#006400;opacity:.25;width:80%"></div>
+                  </div>
+                </div>
+              </article>
+              <h3 class="project-card__title">API Gateway</h3>
+              <p class="project-card__desc">Microserviço com rate limiting, JWT e documentação OpenAPI automática.</p>
+              <div class="project-card__tags">
+                <span class="tag">Node.js</span>
+                <span class="tag">Docker</span>
+                <span class="tag">Redis</span>
+              </div>
+              <div class="project-card__actions">
+                <a href="#" class="btn">▶ Demo</a>
+                <a href="#" class="btn">🐙 GitHub</a>
+              </div>
+            </li>
+
+            <!-- Projeto 3 -->
+            <li class="project-card reveal reveal--delay-3">
+              <article class="window project-preview">
+                <header class="window__titlebar" style="background: linear-gradient(90deg, #800000, #80000099)">
+                  <span class="window__titlebar-text" style="font-size: 10px">DevCollab</span>
+                  <div class="window__controls" aria-hidden="true">
+                    <button class="window__control-btn" style="width:12px;height:11px" tabindex="-1">_</button>
+                    <button class="window__control-btn" style="width:12px;height:11px" tabindex="-1">□</button>
+                    <button class="window__control-btn" style="width:12px;height:11px" tabindex="-1">✕</button>
+                  </div>
+                </header>
+                <div class="project-preview__screen" style="background: linear-gradient(160deg,#80000022,#00000808)" aria-hidden="true">
+                  <div class="project-preview__lines">
+                    <div class="project-preview__line" style="background:#800000;opacity:.5;width:55%"></div>
+                    <div class="project-preview__line" style="background:#800000;opacity:.25;width:100%"></div>
+                    <div class="project-preview__line" style="background:#800000;opacity:.25;width:80%"></div>
+                  </div>
+                </div>
+              </article>
+              <h3 class="project-card__title">DevCollab</h3>
+              <p class="project-card__desc">Plataforma colaborativa com gestão de sprints e notificações via WebSocket.</p>
+              <div class="project-card__tags">
+                <span class="tag">React</span>
+                <span class="tag">Python</span>
+                <span class="tag">FastAPI</span>
+              </div>
+              <div class="project-card__actions">
+                <a href="#" class="btn">▶ Demo</a>
+                <a href="#" class="btn">🐙 GitHub</a>
+              </div>
+            </li>
+
+          </ul>
+        </div>
+
+        <footer class="window__statusbar">
+          <span class="window__status-cell">3 objetos</span>
+          <span class="window__status-cell">Selecione um item para ver detalhes</span>
+        </footer>
+      </article>
+    </section>
+
+    <!-- ── CONTATO ───────────────────────────────────────── -->
+    <section id="contact" aria-labelledby="contact-title">
+      <article class="window reveal">
+        <header class="window__titlebar">
+          <span class="window__titlebar-icon" aria-hidden="true">✉️</span>
+          <span id="contact-title" class="window__titlebar-text">Nova Mensagem — Outlook Express</span>
+          <div class="window__controls" aria-hidden="true">
+            <button class="window__control-btn" tabindex="-1">_</button>
+            <button class="window__control-btn" tabindex="-1">□</button>
+            <button class="window__control-btn" tabindex="-1">✕</button>
+          </div>
+        </header>
+
+        <div class="window__body">
+          <div class="grid-2--contact">
+
+            <form class="contact-form reveal" onsubmit="return false" novalidate aria-label="Formulário de contato">
+              <div class="contact-form__row">
+                <div class="form-field">
+                  <label class="form-label" for="contact-name">Nome</label>
+                  <input class="input" id="contact-name" type="text" placeholder="Seu nome" />
+                </div>
+                <div class="form-field">
+                  <label class="form-label" for="contact-email">E-mail</label>
+                  <input class="input" id="contact-email" type="email" placeholder="seu@email.com" />
+                </div>
+              </div>
+              <div class="form-field">
+                <label class="form-label" for="contact-subject">Assunto</label>
+                <input class="input" id="contact-subject" type="text" placeholder="Sobre o que você quer falar?" />
+              </div>
+              <div class="form-field">
+                <label class="form-label" for="contact-message">Mensagem</label>
+                <textarea class="textarea" id="contact-message" placeholder="Sua mensagem..."></textarea>
+              </div>
+              <div>
+                <button type="submit" class="btn btn--primary">📤 Enviar Mensagem</button>
+              </div>
+            </form>
+
+            <div class="reveal reveal--delay-2">
+              <div class="groupbox">
+                <span class="groupbox__legend">Contatos</span>
+                <ul style="list-style:none; display:flex; flex-direction:column; gap:10px">
+                  <li class="contact-info-item">
+                    <span class="contact-info-item__icon" aria-hidden="true">🐙</span>
+                    <div>
+                      <span class="contact-info-item__label">GitHub</span>
+                      <a href="https://github.com/seunome" target="_blank" rel="noopener" class="contact-info-item__value">github.com/seunome</a>
+                    </div>
+                  </li>
+                  <li class="contact-info-item">
+                    <span class="contact-info-item__icon" aria-hidden="true">💼</span>
+                    <div>
+                      <span class="contact-info-item__label">LinkedIn</span>
+                      <a href="https://linkedin.com/in/seunome" target="_blank" rel="noopener" class="contact-info-item__value">linkedin.com/in/seunome</a>
+                    </div>
+                  </li>
+                  <li class="contact-info-item">
+                    <span class="contact-info-item__icon" aria-hidden="true">📧</span>
+                    <div>
+                      <span class="contact-info-item__label">E-mail</span>
+                      <a href="mailto:oi@seuemail.com" class="contact-info-item__value">oi@seuemail.com</a>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="contact-status">
+                <span class="pulse-dot" aria-hidden="true"></span>
+                Online — resposta em até 24h
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <footer class="window__statusbar">
+          <span class="window__status-cell">Pronto</span>
+          <span class="window__status-cell">0 erros</span>
+        </footer>
+      </article>
+    </section>
+
+  </main>
+
+  <!-- =====================================================
+       TASKBAR
+  ====================================================== -->
+  <footer class="taskbar" role="navigation" aria-label="Barra de tarefas">
+
+    <button
+      class="taskbar__start-btn"
+      id="start-btn"
+      aria-haspopup="true"
+      aria-expanded="false"
+      aria-controls="start-menu"
+    >
+      <div class="win-logo" aria-hidden="true">
+        <span class="win-logo__q"></span>
+        <span class="win-logo__q"></span>
+        <span class="win-logo__q"></span>
+        <span class="win-logo__q"></span>
+      </div>
+      Iniciar
+    </button>
+
+    <div class="taskbar__separator" aria-hidden="true"></div>
+
+    <a href="#hero"     class="taskbar__btn">💻 portfolio.exe</a>
+    <a href="#about"    class="taskbar__btn">👤 Sobre Mim</a>
+    <a href="#tech"     class="taskbar__btn">⚙️ Tecnologias</a>
+    <a href="#projects" class="taskbar__btn">📁 Projetos</a>
+    <a href="#contact"  class="taskbar__btn">✉️ Contato</a>
+
+    <time class="taskbar__clock" id="clock" aria-live="polite"></time>
+  </footer>
+
+  <!-- =====================================================
+       JAVASCRIPT
+       3 responsabilidades apenas:
+       1. Relógio da taskbar
+       2. Toggle do Menu Iniciar
+       3. Animações via IntersectionObserver
+  ====================================================== -->
+  <script>
+    // ── 1. Relógio ─────────────────────────────────────────
+    const clockEl = document.getElementById('clock');
+
+    function updateClock() {
+      clockEl.textContent = new Date().toLocaleTimeString('pt-BR', {
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    // ── 2. Menu Iniciar ────────────────────────────────────
+    const startBtn  = document.getElementById('start-btn');
+    const startMenu = document.getElementById('start-menu');
+
+    function closeMenu() {
+      startMenu.hidden = true;
+      startBtn.setAttribute('aria-expanded', 'false');
+    }
+
+    startBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const opening = startMenu.hidden; // se estava fechado, vai abrir
+      startMenu.hidden = !opening;
+      startBtn.setAttribute('aria-expanded', String(opening));
+    });
+
+    // Fecha ao clicar fora ou ao navegar por um item
+    document.addEventListener('click', closeMenu);
+    startMenu.querySelectorAll('.start-menu__item').forEach(item =>
+      item.addEventListener('click', closeMenu)
+    );
+
+    // Smooth scroll para links âncora
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', (e) => {
+        const target = document.querySelector(anchor.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    // ── 3. Scroll reveal ───────────────────────────────────
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('reveal--visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // ── 3b. Animar barras de progresso ao entrar na tela ───
+    const barObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target
+            .querySelectorAll('.progress__fill')
+            .forEach(bar => bar.classList.add('progress__fill--animated'));
+          barObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+
+    document.querySelectorAll('[data-tech-row]').forEach(el => barObserver.observe(el));
+  </script>
+
+</body>
+</html>
