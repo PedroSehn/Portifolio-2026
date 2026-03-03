@@ -1,0 +1,35 @@
+---
+description: CSS/Tailwind hybrid style convention for the portfolio
+globs: "**/*.tsx,**/*.css"
+alwaysApply: false
+---
+
+# Style Convention: Tailwind + Custom CSS
+
+This project uses a hybrid approach. Follow these guidelines when adding or modifying styles.
+
+## When to Use Tailwind
+
+- **Layout**: `flex`, `grid`, `gap-4`, `items-center`, `justify-between`
+- **Spacing**: `p-4`, `m-2`, `px-6`, `gap-2`
+- **Typography**: `text-[11px]`, `font-bold`, `leading-tight`, `truncate`
+- **Responsive**: `hidden`, `md:flex`, `lg:grid-cols-3`
+- **Design tokens**: `bg-win-gray`, `shadow-raised`, `text-win-navy` (from tailwind.config.ts)
+
+## When to Use Custom CSS (index.css)
+
+- **Win95 components**: Titlebar, menubar, statusbar, start menu, taskbar, desktop icons
+- **Pseudo-elements**: `::before`, `::after` for icons (e.g. min/max window buttons)
+- **Complex selectors**: Hover/active states, focus-visible, nested BEM
+- **Animations**: `@keyframes` and animation classes
+
+## Naming Conventions
+
+- **Shared Win95 UI**: `win95-*` (e.g. `win95-titlebar`, `win95-menubar-item`)
+- **Section-specific**: BEM under section scope (e.g. `#tech .explorer__sidebar`, `.sidebar-item--active`)
+
+## Where to Add New Styles
+
+- **New utility/layout**: Use Tailwind classes in the component
+- **New Win95-style component**: Add to `src/index.css` with `win95-` prefix
+- **Section-specific layout**: Add under `#tech` or relevant section in `src/index.css`

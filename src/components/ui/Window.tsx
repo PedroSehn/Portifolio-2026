@@ -51,24 +51,10 @@ export default function Window({
         </span>
         <span className="truncate flex-1">{title}</span>
         <div className="flex gap-1" aria-hidden="true">
-          <button className="win95-titlebar-button" aria-label="Minimize">
-            <span
-              style={{ borderBottom: '1px solid black', width: 6, display: 'block' }}
-            />
-          </button>
-          <button className="win95-titlebar-button" aria-label="Maximize">
-            <span
-              style={{
-                border: '1px solid black',
-                width: 7,
-                height: 6,
-                display: 'block',
-                borderTopWidth: 2,
-              }}
-            />
-          </button>
+          <button className="win95-titlebar-button win95-titlebar-btn-min" aria-label="Minimize" />
+          <button className="win95-titlebar-button win95-titlebar-btn-max" aria-label="Maximize" />
           <button className="win95-titlebar-button" aria-label="Close">
-            <span style={{ fontSize: 9, fontWeight: 'bold', lineHeight: 1 }}>✕</span>
+            <span className="win95-titlebar-btn-close">✕</span>
           </button>
         </div>
       </header>

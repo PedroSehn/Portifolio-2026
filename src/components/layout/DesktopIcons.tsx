@@ -12,7 +12,7 @@ export default function DesktopIcons() {
 
   return (
     <nav
-      className="desktop-icons hidden md:flex fixed top-5 left-[14px] flex-col gap-[18px] z-10"
+      className="desktop-icons hidden md:flex"
       aria-label="Atalhos da área de trabalho"
     >
       {icons.map((icon) => {
@@ -29,10 +29,7 @@ export default function DesktopIcons() {
             <span className="text-[30px] leading-none desktop-icon__img" aria-hidden="true">
               {icon.emoji}
             </span>
-            <span
-              className="text-white text-[11px] font-semibold desktop-icon__label"
-              style={{ textShadow: '1px 1px 1px black' }}
-            >
+            <span className="text-white text-[11px] font-semibold desktop-icon__label">
               {icon.label}
             </span>
           </a>

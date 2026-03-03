@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * Hybrid style approach:
+ * - Tailwind: layout, spacing, typography, responsive (use in components)
+ * - Custom CSS: Win95 components, pseudo-elements, complex selectors (this file)
+ * - Naming: win95-* for shared UI, BEM under #tech for section-specific
+ */
+
 :root {
   --font: 'Tahoma', 'MS Sans Serif', 'Arial', sans-serif;
   --gray: #c0c0c0;
@@ -11,6 +18,7 @@
   --black: #000000;
   --navy: #000080;
   --teal: #008080;
+  --teal-bg: #008080;
   --blue: #1084d0;
   --raised:
     inset -1px -1px 0 #404040,
@@ -101,6 +109,30 @@ body {
 }
 .win95-titlebar-button:active {
   box-shadow: var(--sunken);
+}
+
+.win95-titlebar-btn-min::before {
+  content: '';
+  display: block;
+  width: 6px;
+  height: 1px;
+  background: var(--black);
+  margin-top: 6px;
+}
+
+.win95-titlebar-btn-max::before {
+  content: '';
+  display: block;
+  width: 7px;
+  height: 6px;
+  border: 1px solid var(--black);
+  border-top-width: 2px;
+}
+
+.win95-titlebar-btn-close {
+  font-size: 9px;
+  font-weight: bold;
+  line-height: 1;
 }
 
 .win95-menubar {
@@ -263,116 +295,13 @@ body {
   animation: startBtnClick 0.22s ease-out;
 }
 
+.taskbar__btn:hover {
+  background: #a0a0a0;
+}
+
 #tech {
   background: var(--teal-bg);
   width: 100%;
-}
-
-#tech .window {
-  background: var(--gray);
-  border: 2px solid;
-  border-color: var(--white) var(--dark) var(--dark) var(--white);
-  box-shadow: 2px 2px 0 var(--black);
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 600px;
-  animation: windowOpen 0.18s ease-out;
-}
-
-#tech .titlebar {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 3px 5px;
-  user-select: none;
-  cursor: default;
-  background: linear-gradient(90deg, #000080, #1084d0);
-}
-
-#tech .titlebar--inactive {
-  background: var(--dark);
-}
-
-#tech .titlebar__icon {
-  font-size: 14px;
-  line-height: 1;
-}
-
-#tech .titlebar__text {
-  color: white;
-  font-size: 11px;
-  font-weight: 700;
-  flex: 1;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-#tech .titlebar__controls {
-  display: flex;
-  gap: 2px;
-}
-
-#tech .titlebar__btn {
-  width: 16px;
-  height: 14px;
-  background: var(--gray);
-  box-shadow: var(--raised);
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 9px;
-  font-family: var(--font);
-  flex-shrink: 0;
-  padding: 0;
-}
-
-#tech .titlebar__btn:active {
-  box-shadow: var(--sunken);
-}
-
-#tech .titlebar__btn--min::before {
-  content: '';
-  display: block;
-  width: 6px;
-  height: 1px;
-  background: var(--black);
-  margin-top: 6px;
-}
-
-#tech .titlebar__btn--max::before {
-  content: '';
-  display: block;
-  width: 7px;
-  height: 6px;
-  border: 1px solid var(--black);
-  border-top-width: 2px;
-}
-
-#tech .menubar {
-  display: flex;
-  padding: 1px 2px;
-  border-bottom: 1px solid var(--dark);
-  gap: 0;
-}
-
-#tech .menubar__item {
-  padding: 2px 6px;
-  font-size: 11px;
-  cursor: default;
-  user-select: none;
-}
-
-#tech .menubar__item:hover {
-  background: var(--navy);
-  color: white;
-}
-
-#tech .menubar__item u {
-  text-decoration: underline;
 }
 
 #tech .explorer {
@@ -472,20 +401,6 @@ body {
   text-align: center;
   line-height: 1.3;
   word-break: break-word;
-}
-
-#tech .statusbar {
-  display: flex;
-  border-top: 1px solid var(--dark);
-  padding: 2px 4px;
-  gap: 4px;
-}
-
-#tech .statusbar__cell {
-  box-shadow: var(--sunken);
-  padding: 1px 8px;
-  font-size: 10px;
-  color: var(--darker);
 }
 
 #tech .file-icon:focus-visible,
