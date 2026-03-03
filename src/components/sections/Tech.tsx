@@ -45,9 +45,8 @@ export default function Tech({ isActive = true, onActivate }: TechProps) {
   }
 
   return (
-    <section id="tech" aria-labelledby="tech-title" className="flex justify-center px-2">
-      <div className="w-full max-w-[600px]">
-        <Window
+    <section id="tech" aria-labelledby="tech-title">
+      <Window
           icon="📁"
           title="Explorador — Tecnologias"
           isActive={isActive}
@@ -110,7 +109,6 @@ export default function Tech({ isActive = true, onActivate }: TechProps) {
             </main>
           </div>
         </Window>
-      </div>
     </section>
   )
 }
