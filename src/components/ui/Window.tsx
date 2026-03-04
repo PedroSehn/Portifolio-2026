@@ -14,6 +14,7 @@ interface WindowProps {
   isActive?: boolean
   onActivate?: () => void
   menuItems?: WindowMenuItem[]
+  showTitleButtons?: boolean
 }
 
 export default function Window({
@@ -28,6 +29,7 @@ export default function Window({
   isActive = true,
   onActivate,
   menuItems,
+  showTitleButtons = true,
 }: WindowProps) {
   const menuItemsWithUnderline = (menuItems ?? []).map((item) => {
     const label = typeof item === 'string' ? item : item.label
@@ -53,11 +55,15 @@ export default function Window({
         </span>
         <span className="truncate flex-1">{title}</span>
         <div className="flex gap-1" aria-hidden="true">
+          {showTitleButtons && (
+            <>
           <button className="win95-titlebar-button win95-titlebar-btn-min" aria-label="Minimize" />
           <button className="win95-titlebar-button win95-titlebar-btn-max" aria-label="Maximize" />
           <button className="win95-titlebar-button" aria-label="Close">
             <span className="win95-titlebar-btn-close">✕</span>
           </button>
+            </>
+          )}
         </div>
       </header>
 

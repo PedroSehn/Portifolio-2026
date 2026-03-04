@@ -47,14 +47,15 @@ export default function Tech({ isActive = true, onActivate }: TechProps) {
   return (
     <section id="tech" aria-labelledby="tech-title">
       <Window
-          icon="📁"
-          title="Explorador — Tecnologias"
-          isActive={isActive}
-          onActivate={onActivate}
-          menuItems={defaultWindowMenu}
-          statusBar={[`${activeCategory.techs.length} objetos`]}
-          className="lg:w-[auto] sm:w-[100%]"
-        >
+        icon="📁"
+        title="Explorador — Tecnologias"
+        isActive={isActive}
+        onActivate={onActivate}
+        menuItems={defaultWindowMenu}
+        statusBar={[`${activeCategory.techs.length} objetos`]}
+        className="w-full h-full"
+        contentClassName="flex h-full flex-col gap-4 px-4 py-4 min-h-0"
+      >
           <div className="explorer">
             <aside className="explorer__sidebar" aria-label="Categorias">
               <div className="explorer__sidebar-header">Todas as Pastas</div>

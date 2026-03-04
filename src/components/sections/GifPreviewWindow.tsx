@@ -13,7 +13,7 @@ export default function GifPreviewWindow({ isActive = true, onActivate }: GifPre
         title="Gif preview"
         isActive={isActive}
         onActivate={onActivate}
-        className="w-[33%] min-w-[220px]"
+        className="w-full min-w-[220px]"
         contentClassName="h-full px-6 py-5 bg-win95-silver"
       >
         <div className="flex h-full w-full items-center justify-center gifFrame">

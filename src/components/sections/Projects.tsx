@@ -10,25 +10,25 @@ interface ProjectsProps {
   onActivate?: () => void
 }
 
-function ProjectCard({ project }: { project: Project }) {
-  const gradient = `linear-gradient(90deg, ${project.color}, ${project.color}99)`
+interface ProjectCardProps {
+  project: Project
+  isActive?: boolean
+}
+
+function ProjectCard({ project, isActive }: ProjectCardProps) {
   const preview = `linear-gradient(160deg, ${project.color}22, #00000808)`
 
   return (
-    <article className="bg-win-gray shadow-raised p-3 flex flex-col gap-2">
+    <Window
+      icon=""
+      title={project.title}
+      className="h-full"
+      contentClassName="flex h-fit flex-col gap-3 px-4 py-4"
+      isActive={isActive ?? true}
+      showTitleButtons={false}
+    >
       <div
-        className="flex items-center justify-between gap-2 px-2 py-1 text-[10px] font-bold uppercase border border-win-dark shadow-groupbox"
-        style={{ background: gradient }}
-      >
-        <div>{project.title}</div>
-        <div className="flex gap-1" aria-hidden="true">
-          <span className="w-3 h-3 bg-win-gray shadow-raised" />
-          <span className="w-3 h-3 bg-win-gray shadow-raised" />
-          <span className="w-3 h-3 bg-win-gray shadow-raised" />
-        </div>
-      </div>
-      <div
-        className="h-[90px] shadow-sunken rounded-sm"
+        className="h-[130px] rounded-sm shadow-sunken"
         style={{ background: preview }}
         aria-hidden="true"
       />
@@ -38,11 +38,11 @@ function ProjectCard({ project }: { project: Project }) {
           <Tag key={tag}>{tag}</Tag>
         ))}
       </div>
-      <div className="flex gap-2">
+      <div className="mt-auto flex gap-2">
         <Button href={project.demo}>▶ Demo</Button>
         <Button href={project.repo}>🐙 GitHub</Button>
       </div>
-    </article>
+    </Window>
   )
 }
 
@@ -56,11 +56,16 @@ export default function Projects({ isActive, onActivate }: ProjectsProps) {
         statusBar={[`${projects.length} projetos`]}
         isActive={isActive}
         onActivate={onActivate}
-        className="w-full h-[480px]" 
+      className="w-full min-h-[480px]"
+      contentClassName="flex flex-col gap-3 px-6 py-5"
       >
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+        <div className="grid flex-1 min-h-0 grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
           {projects.map((project) => (
-            <ProjectCard key={project.id} project={project} />
+            <ProjectCard
+              key={project.id}
+              project={project}
+              isActive={isActive ?? true}
+            />
           ))}
         </div>
       </Window>

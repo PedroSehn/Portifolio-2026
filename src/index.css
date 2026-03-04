@@ -307,7 +307,10 @@ body {
 
 #tech .explorer {
   display: flex;
-  min-height: 200px;
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  min-width: 0;
 }
 
 #tech .explorer__sidebar {
@@ -356,9 +359,12 @@ body {
 
 #tech .explorer__content {
   flex: 1;
+  min-height: 0;
+  min-width: 0;
   background: white;
   box-shadow: var(--sunken);
   padding: 8px;
+  overflow-x: hidden;
   overflow-y: auto;
 }
 
@@ -367,6 +373,8 @@ body {
   flex-wrap: wrap;
   gap: 4px;
   align-content: flex-start;
+  width: 100%;
+  max-width: 100%;
 }
 
 #tech .file-icon {
@@ -430,9 +438,9 @@ body {
   }
   #tech .file-grid {
     flex-direction: row;
-    justify-content: center;
-    overflow-x: auto;
+    justify-content: flex-start;
     gap: 8px;
+    overflow-x: auto;
   }
   #tech .file-icon {
     flex-shrink: 0;
