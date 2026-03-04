@@ -56,8 +56,8 @@ export default function Projects({ isActive, onActivate }: ProjectsProps) {
         statusBar={[`${projects.length} projetos`]}
         isActive={isActive}
         onActivate={onActivate}
-      className="w-full min-h-[480px]"
-      contentClassName="flex flex-col gap-3 px-6 py-5"
+      className="w-full min-h-[480px] lg-h-[480px]"
+      contentClassName="flex flex-col flex-1 min-h-0 gap-3 px-6 py-5"
       >
         <div className="grid flex-1 min-h-0 grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
           {projects.map((project) => (
