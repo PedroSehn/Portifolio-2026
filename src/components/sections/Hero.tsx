@@ -8,31 +8,31 @@ const TOKENS: { text: string; type: 'keyword' | 'variable' | 'property' | 'strin
   { text: 'dev', type: 'variable' },
   { text: ' = {\n', type: 'punctuation' },
   { text: '  ', type: 'punctuation' },
-  { text: 'name', type: 'property' },
+  { text: 'nome', type: 'property' },
   { text: ': "', type: 'punctuation' },
   { text: 'Seu Nome', type: 'string' },
   { text: '",\n', type: 'punctuation' },
   { text: '  ', type: 'punctuation' },
-  { text: 'role', type: 'property' },
+  { text: 'cargo', type: 'property' },
   { text: ': "', type: 'punctuation' },
-  { text: 'Fullstack Dev', type: 'string' },
+  { text: 'Desenvolvedor Fullstack', type: 'string' },
   { text: '",\n', type: 'punctuation' },
   { text: '  ', type: 'punctuation' },
-  { text: 'years', type: 'property' },
+  { text: 'anosDeExperiencia', type: 'property' },
   { text: ': ', type: 'punctuation' },
-  { text: '5', type: 'number' },
+  { text: '3', type: 'number' },
   { text: ',\n', type: 'punctuation' },
   { text: '  ', type: 'punctuation' },
-  { text: 'hire', type: 'property' },
+  { text: 'contratar', type: 'property' },
   { text: ': ', type: 'punctuation' },
   { text: 'true', type: 'boolean' },
   { text: ',\n', type: 'punctuation' },
-  { text: '}', type: 'punctuation' },
+  { text: '}; 👻', type: 'punctuation' },
 ]
 
 const PROMPT_TEXT = TOKENS.map((t) => t.text).join('')
 
-const TYPING_INTERVAL_MS = 45
+const TYPING_INTERVAL_MS = 40
 const CURSOR_BLINK_MS = 530
 
 interface HeroProps {
@@ -70,14 +70,14 @@ export default function Hero({ isActive, onActivate }: HeroProps) {
         contentClassName="px-6 py-5"
         menuItems={defaultWindowMenu}
         statusBar={[
-          '5 anos de experiência',
+          '3 anos de experiência',
           '30+ projetos entregues',
           '12+ clientes',
         ]}
         isActive={isActive}
         onActivate={onActivate}
       >
-        <div className="flex flex-col gap-4 md:flex-row md:gap-x-4 md:gap-y-6 md:items-start">
+        <div className="flex flex-col gap-4 md:flex-row md:gap-x-4 md:gap-y-6 md:items-center lg:px-8">
           <div className="flex flex-1 min-w-0 flex-col gap-4">
             <p className="text-[10px] uppercase tracking-[0.2em] text-win-dark">
               Disponível para projetos
@@ -96,7 +96,7 @@ export default function Hero({ isActive, onActivate }: HeroProps) {
             </div>
           </div>
 
-          <article className="shrink-0 bg-[#282c34] p-6 text-[16px] font-mono leading-relaxed shadow-sunken md:min-w-[440px]">
+          <article className="shrink-0 bg-[#282c34] p-6 text-[16px] font-mono leading-relaxed shadow-sunken md:min-w-[440px] lg:min-h-[195px]">
             <pre className="overflow-hidden">
               <code>
                 {(() => {
