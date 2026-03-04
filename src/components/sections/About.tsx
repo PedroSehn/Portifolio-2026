@@ -32,7 +32,7 @@ export default function About({ isActive, onActivate }: AboutProps) {
 
           <div className="flex flex-col gap-2">
             <h2 id="about-title" className="text-[22px] font-bold leading-none">
-              Seu Nome
+              Pedro Sehn
             </h2>
             <p className="text-[13px] font-bold text-win-navy">
               Fullstack Developer — 5 anos de experiência
