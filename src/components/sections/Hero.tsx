@@ -10,7 +10,7 @@ const TOKENS: { text: string; type: 'keyword' | 'variable' | 'property' | 'strin
   { text: '  ', type: 'punctuation' },
   { text: 'nome', type: 'property' },
   { text: ': "', type: 'punctuation' },
-  { text: 'Seu Nome', type: 'string' },
+  { text: 'Pedro Sehn', type: 'string' },
   { text: '",\n', type: 'punctuation' },
   { text: '  ', type: 'punctuation' },
   { text: 'cargo', type: 'property' },
@@ -83,7 +83,7 @@ export default function Hero({ isActive, onActivate }: HeroProps) {
               Disponível para projetos
             </p>
             <h1 id="hero-title" className="text-[48px] font-bold leading-tight">
-              Seu Nome
+              Pedro Sehn
             </h1>
             <p className="text-[16px] font-bold text-win-navy">
               Fullstack Developer
