@@ -53,7 +53,7 @@ export default function Tech({ isActive = true, onActivate }: TechProps) {
           onActivate={onActivate}
           menuItems={defaultWindowMenu}
           statusBar={[`${activeCategory.techs.length} objetos`]}
-          className="w-full"
+          className="lg:w-[auto] sm:w-[100%]"
         >
           <div className="explorer">
             <aside className="explorer__sidebar" aria-label="Categorias">

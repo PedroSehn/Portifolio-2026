@@ -56,6 +56,7 @@ export default function Projects({ isActive, onActivate }: ProjectsProps) {
         statusBar={[`${projects.length} projetos`]}
         isActive={isActive}
         onActivate={onActivate}
+        className="w-full h-[480px]" 
       >
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
           {projects.map((project) => (

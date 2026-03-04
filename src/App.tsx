@@ -8,6 +8,7 @@ import Hero from './components/sections/Hero'
 import Tech from './components/sections/Tech'
 import Projects from './components/sections/Projects'
 import Contact from './components/sections/Contact'
+import GifPreviewWindow from './components/sections/GifPreviewWindow'
 
 function App() {
   const [startMenuOpen, setStartMenuOpen] = useState(false)
@@ -25,10 +26,18 @@ function App() {
           isActive={activeWindow === 'about'}
           onActivate={() => setActiveWindow('about')}
         /> */}
-        <Tech
-          isActive={activeWindow === 'tech'}
-          onActivate={() => setActiveWindow('tech')}
-        />
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-stretch">
+          <Tech
+            isActive={activeWindow === 'tech'}
+            onActivate={() => setActiveWindow('tech')}
+          />
+          <div className="hidden lg:block">
+            <GifPreviewWindow
+              isActive={activeWindow === 'gif'}
+              onActivate={() => setActiveWindow('gif')}
+            />
+          </div>
+        </div>
         <Projects
           isActive={activeWindow === 'projects'}
           onActivate={() => setActiveWindow('projects')}
