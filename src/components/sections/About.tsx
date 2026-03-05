@@ -15,7 +15,7 @@ export default function About({ isActive, onActivate }: AboutProps) {
         title="Sobre Mim"
         className="grid"
         menuItems={defaultWindowMenu}
-        statusBar={['Fullstack', '5 anos exp', 'Disponível para projetos']}
+        statusBar={['Fullstack', '5 anos exp']}
         isActive={isActive}
         onActivate={onActivate}
       >
