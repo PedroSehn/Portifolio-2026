@@ -444,14 +444,28 @@ body {
     border-bottom: 1px solid var(--dark);
     box-shadow: var(--sunken);
     display: flex;
-    overflow-x: auto;
-    overflow-y: visible;
+    flex-direction: column;
+    width: 100%;
+    overflow-y: auto;
   }
   #tech .explorer__sidebar-header {
     display: none;
   }
   #tech .sidebar-item {
     white-space: nowrap;
+  }
+  #tech .explorer__sidebar ul {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    width: 100%;
+    padding: 4px 0;
+  }
+  #tech .sidebar-item {
+    width: 100%;
+    box-sizing: border-box;
+    justify-content: flex-start;
+    padding: 6px 10px;
   }
   #tech .file-grid {
     flex-direction: row;
