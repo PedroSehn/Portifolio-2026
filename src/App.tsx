@@ -4,11 +4,11 @@ import DesktopIcons from './components/layout/DesktopIcons'
 import Taskbar from './components/layout/Taskbar'
 import StartMenu from './components/layout/StartMenu'
 import Hero from './components/sections/Hero'
-// import About from './components/sections/About'
+import About from './components/sections/About'
 import Tech from './components/sections/Tech'
 import Projects from './components/sections/Projects'
 import Contact from './components/sections/Contact'
-import GifPreviewWindow from './components/sections/GifPreviewWindow'
+// import GifPreviewWindow from './components/sections/GifPreviewWindow'
 
 function App() {
   const [startMenuOpen, setStartMenuOpen] = useState(false)
@@ -22,21 +22,21 @@ function App() {
           isActive={activeWindow === 'hero'}
           onActivate={() => setActiveWindow('hero')}
         />
-        {/* <About
-          isActive={activeWindow === 'about'}
-          onActivate={() => setActiveWindow('about')}
-        /> */}
         <div className="flex flex-col gap-3 lg:flex-row lg:items-stretch">
+          <About
+            isActive={activeWindow === 'about'}
+            onActivate={() => setActiveWindow('about')}
+          /> 
           <Tech
             isActive={activeWindow === 'tech'}
             onActivate={() => setActiveWindow('tech')}
           />
-          <div className="hidden lg:block">
+          {/* <div className="hidden lg:block">
             <GifPreviewWindow
               isActive={activeWindow === 'gif'}
               onActivate={() => setActiveWindow('gif')}
             />
-          </div>
+          </div> */}
         </div>
         <Projects
           isActive={activeWindow === 'projects'}
