@@ -15,7 +15,7 @@ export default function About({ isActive, onActivate }: AboutProps) {
         title="Sobre Mim"
         className="grid"
         menuItems={defaultWindowMenu}
-        statusBar={['Fullstack Developer', '5 anos de experiência', 'Disponível para projetos']}
+        statusBar={['Fullstack', '5 anos exp', 'Disponível para projetos']}
         isActive={isActive}
         onActivate={onActivate}
       >
@@ -30,24 +30,26 @@ export default function About({ isActive, onActivate }: AboutProps) {
             </span>
           </div>
 
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2" >
             <h2 id="about-title" className="text-[22px] font-bold leading-none">
-              Pedro Sehn
+              Oi, eu sou o Pedro!
             </h2>
             <p className="text-[13px] font-bold text-win-navy">
-              Fullstack Developer — 5 anos de experiência
+              Fullstack Developer — 5 anos de tecnologia aplicada
             </p>
             <hr className="border-t border-win-dark" />
-            <p className="text-[12px] leading-relaxed text-win-darker">
-              Construo produtos digitais do banco de dados ao pixel — com foco em
-              código limpo, arquitetura sólida e interfaces que funcionam de
-              verdade.
+            <p className="text-[12px] leading-relaxed text-win-darker bg-white p-4 font-bold max-w-[1700px]" style={{ boxShadow: 'var(--sunken)' }}>
+              Sou o tipo de dev que gosta de entender o sistema inteiro, do banco até a interface.
+
+              Trabalho principalmente com React, Node.js e TypeScript, construindo e mantendo aplicações usadas em produção. Já participei de projetos que somam 200k+ acessos mensais, com foco em manter o código simples, testável e estável ao longo do tempo.
+
+              No dia a dia tento equilibrar três coisas: arquitetura que não vira dívida técnica, interfaces que realmente funcionam para quem usa, e código que outro dev consiga abrir daqui a um ano sem querer me xingar.
             </p>
-            <div className="flex flex-wrap gap-2">
-              <Button href="#">🐙 GitHub</Button>
-              <Button href="#">💼 LinkedIn</Button>
-              <Button href="#">📧 E-mail</Button>
-            </div>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <Button href="#">🐙 GitHub</Button>
+            <Button href="#">💼 LinkedIn</Button>
+            <Button href="#">📧 E-mail</Button>
           </div>
         </div>
       </Window>
