@@ -5,7 +5,7 @@ const icons = [
   { emoji: '📁', label: 'Projetos', href: '#projects' },
   { emoji: '✉️', label: 'Contato', href: '#contact' },
   { emoji: '🐙', label: 'GitHub', href: 'https://github.com/PedroSehn', blank: true },
-  { emoji: '📞', label: 'Whatsapp', href: 'https://wa.me/51984574823?text=MENSAGEM_AQUI', blank: true },
+  { emoji: '📞', label: 'Whatsapp', href: 'https://wa.me/5551984574823', blank: true },
 ]
 
 export default function DesktopIcons() {

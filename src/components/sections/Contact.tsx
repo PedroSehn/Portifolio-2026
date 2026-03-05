@@ -10,18 +10,23 @@ interface ContactProps {
 const contactLinks = [
   {
     label: 'GitHub',
-    href: 'https://github.com/seunome',
+    href: 'https://github.com/PedroSehn',
     emoji: '🐙',
   },
   {
     label: 'LinkedIn',
-    href: 'https://linkedin.com/in/seunome',
+    href: 'https://linkedin.com/in/pedrosehn',
     emoji: '💼',
   },
   {
     label: 'E-mail',
-    href: 'mailto:oi@seuemail.com',
+    href: 'mailto:oi@pedrorsehn@hotmail.com',
     emoji: '📧',
+  },
+  {
+    label: 'Whatsapp',
+    href: 'https://wa.me/5551984574823',
+    emoji: '📞',
   },
 ]
 
