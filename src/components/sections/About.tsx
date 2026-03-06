@@ -1,6 +1,7 @@
 import Button from '../ui/Button'
 import Window from '../ui/Window'
 import { defaultWindowMenu } from '../../constants/windowMenu'
+import profilePhoto from '../../assets/fotoperfi;.png'
 
 interface AboutProps {
   isActive?: boolean
@@ -19,15 +20,16 @@ export default function About({ isActive, onActivate }: AboutProps) {
         isActive={isActive}
         onActivate={onActivate}
       >
-        <div className="grid md:grid-cols-[auto,1fr] gap-6">
+        <div className="grid md:grid-cols-[auto,1fr] gap-6 items-start pl-4">
           <div
-            className="w-[180px] h-[220px] bg-gradient-to-br from-[#a0a0a0] to-[#d0d0d0] shadow-sunken flex flex-col items-center justify-center gap-2"
-            aria-hidden="true"
+            className="w-[180px] h-full overflow-hidden border border-win-dark p-1"
+            style={{ boxShadow: 'var(--sunken)' }}
           >
-            <span className="text-[52px] font-bold text-[#404040]">SN</span>
-            <span className="text-[9px] uppercase tracking-[0.2em] text-[#606060]">
-              Foto
-            </span>
+            <img
+              src={profilePhoto}
+              alt="Pedro sorrindo"
+              className="w-full h-full object-cover"
+            />
           </div>
 
           <div className="flex flex-col gap-2" >
@@ -46,11 +48,11 @@ export default function About({ isActive, onActivate }: AboutProps) {
               No dia a dia tento equilibrar três coisas: arquitetura que não vira dívida técnica, interfaces que realmente funcionam para quem usa, e código que outro dev consiga abrir daqui a um ano sem querer me xingar.
             </p>
           </div>
-          <div className="flex flex-wrap gap-2">
+          {/* <div className="flex flex-wrap gap-2">
             <Button href="#">🐙 GitHub</Button>
             <Button href="#">💼 LinkedIn</Button>
             <Button href="#">📧 E-mail</Button>
-          </div>
+          </div> */}
         </div>
       </Window>
     </section>
