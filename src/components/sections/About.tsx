@@ -1,4 +1,4 @@
-import Button from '../ui/Button'
+// import Button from '../ui/Button'
 import Window from '../ui/Window'
 import { defaultWindowMenu } from '../../constants/windowMenu'
 import profilePhoto from '../../assets/fotoperfi;.png'
