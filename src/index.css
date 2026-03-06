@@ -208,6 +208,17 @@ body {
   user-select: none;
 }
 
+.footer-contact-button {
+  width: 72px;
+  min-height: 88px;
+  padding: 8px;
+  color: hsl(0 0% 0%);
+  border: 2px solid;
+  border-color: #ffffff #808080 #808080 #ffffff;
+  box-shadow: var(--raised);
+  background: #c0c0c0;
+}
+
 .desktop-icon__img {
   font-size: 30px;
   line-height: 1;

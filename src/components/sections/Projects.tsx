@@ -4,6 +4,7 @@ import Window from '../ui/Window'
 import { defaultWindowMenu } from '../../constants/windowMenu'
 import { projects } from '../../data/projects'
 import type { Project } from '../../types'
+import githubIcon from '../../assets/github-5.png'
 
 interface ProjectsProps {
   isActive?: boolean
@@ -40,7 +41,15 @@ function ProjectCard({ project, isActive }: ProjectCardProps) {
       </div>
       <div className="mt-auto flex gap-2">
         <Button href={project.demo}>▶ Demo</Button>
-        <Button href={project.repo}>🐙 GitHub</Button>
+        <Button href={project.repo}>
+          <img
+            src={githubIcon}
+            alt=""
+            aria-hidden="true"
+            className="h-3 w-3 object-contain"
+          />
+          GitHub
+        </Button>
       </div>
     </Window>
   )

@@ -1,22 +1,33 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import Window from '../ui/Window'
 import { defaultWindowMenu } from '../../constants/windowMenu'
+import msnPreview from '../../assets/msn3-5.png'
+import githubIcon from '../../assets/github-5.png'
+import linkedinIcon from '../../assets/linkedin.png'
+import whatsappIcon from '../../assets/wpp.png'
 
 interface ContactProps {
   isActive?: boolean
   onActivate?: () => void
 }
 
-const contactLinks = [
+interface ContactLink {
+  label: string
+  href: string
+  emoji?: string
+  icon?: string
+}
+
+const contactLinks: ContactLink[] = [
   {
     label: 'GitHub',
     href: 'https://github.com/PedroSehn',
-    emoji: '🐙',
+    icon: githubIcon,
   },
   {
     label: 'LinkedIn',
     href: 'https://linkedin.com/in/pedrosehn',
-    emoji: '💼',
+    icon: linkedinIcon,
   },
   {
     label: 'E-mail',
@@ -26,7 +37,7 @@ const contactLinks = [
   {
     label: 'Whatsapp',
     href: 'https://wa.me/5551984574823',
-    emoji: '📞',
+    icon: whatsappIcon,
   },
 ]
 
@@ -103,7 +114,13 @@ export default function Contact({ isActive, onActivate }: ContactProps) {
   return (
     <section id="contact" aria-labelledby="contact-title">
       <Window
-        icon="💬"
+        icon={
+          <img
+            src={msnPreview}
+            alt="MSN Messenger icon"
+            className="h-4 w-4 object-cover"
+          />
+        }
         title="MSN Messenger — pedrorsehn@hotmail.com"
         menuItems={defaultWindowMenu}
         statusBar={['Online']}
@@ -200,12 +217,20 @@ export default function Contact({ isActive, onActivate }: ContactProps) {
                 href={link.href}
                 target="_blank"
                 rel="noreferrer"
-                className="win95-desktop-icon"
-                style={{ width: 56, color: 'hsl(0 0% 0%)' }}
+                className="win95-desktop-icon flex flex-col items-center justify-center gap-1 footer-contact-button"
               >
-                <span style={{ fontSize: 18 }} aria-hidden="true">
-                  {link.emoji}
-                </span>
+                {link.icon ? (
+                  <img
+                    src={link.icon}
+                    alt={`${link.label} icon`}
+                    aria-hidden="true"
+                    className="h-10 w-10 object-cover"
+                  />
+                ) : (
+                  <span style={{ fontSize: 20 }} aria-hidden="true">
+                    {link.emoji}
+                  </span>
+                )}
                 <span className="win95-icon-label" style={{ fontSize: 10 }}>
                   {link.label}
                 </span>

@@ -3,7 +3,7 @@ import type { CSSProperties, ReactNode } from 'react'
 type WindowMenuItem = string | { label: string; underlineIndex?: number }
 
 interface WindowProps {
-  icon: string
+  icon: ReactNode
   title: string
   statusBar?: string[]
   children: ReactNode
@@ -50,7 +50,7 @@ export default function Window({
           titlebarClassName ?? ''
         }`.trim()}
       >
-        <span className="text-lg" aria-hidden="true">
+        <span className="inline-flex items-center justify-center" aria-hidden="true">
           {icon}
         </span>
         <span className="truncate flex-1">{title}</span>

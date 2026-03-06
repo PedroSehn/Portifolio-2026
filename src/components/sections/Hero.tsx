@@ -66,7 +66,7 @@ export default function Hero({ isActive, onActivate }: HeroProps) {
     <section id="hero" aria-labelledby="hero-title">
       <Window
         icon="💻"
-        title="portfolio.exe"
+        title="Portifolio"
         contentClassName="px-6 py-5"
         menuItems={defaultWindowMenu}
         statusBar={[
