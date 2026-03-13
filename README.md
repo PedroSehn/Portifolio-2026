@@ -1,4 +1,4 @@
-9# Acesse o site em 👉 [aqui](pedrosehn.github.io/Portifolio-2026)
+# Acesse o site em 👉 [aqui](pedrosehn.github.io/Portifolio-2026)
 
 ## React + TypeScript + Vite
 
